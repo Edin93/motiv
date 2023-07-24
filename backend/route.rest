@@ -1,0 +1,33 @@
+GET http://localhost:5050/users
+
+###
+
+GET http://localhost:5050/users/64be92d1c6bef4cdf6484aba
+
+###
+
+GET http://localhost:5050/users/64be9516b7c9838a5e7cbb80
+
+###
+
+POST http://localhost:5050/users
+Content-Type: application/json
+
+{
+    "username": "user4",
+    "email": "user4@gmail.com",
+    "password": "123abc"
+}
+
+###
+
+DELETE http://localhost:5050/users/64be9516b7c9838a5e7cbb80
+
+###
+
+PATCH http://localhost:5050/users/64be92d1c6bef4cdf6484aba
+Content-Type: application/json
+
+{
+    "username": "newNameee"
+}
