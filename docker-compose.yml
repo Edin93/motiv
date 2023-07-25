@@ -1,0 +1,37 @@
+version: "3.9"  # Use the Docker compose version 3.9
+
+services:
+  # Service for the Node.js Express application
+  backend-motiv-app:
+    build: ./backend  # Directory containing the backend Dockerfile
+    ports:
+      - "3000:3000"    # Map port 3000 from the host to port 3000 in the container
+    networks:
+      - motiv-app
+
+  # Service for the React Native Expo application
+  frontend-motiv-app:
+    build: ./frontend # Directory containing the frontend Dockerfile
+    ports:
+      - "19000:19000"  # Map port 19000 from the host to port 19000 in the container
+      - "19001:19001"  # Map port 19001 from the host to port 19001 in the container
+      - "19006:19006"  # Map port 19006 from the host to port 19006 in the container
+    networks:
+      - motiv-app
+
+  # Service for MongoDB Atlas (Cloud MongoDB)
+  mongodb:
+    image: mongo:latest   # Use the latest official MongoDB image from Docker Hub
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "motivadmindb"  # MongoDB Atlas username
+      MONGO_INITDB_ROOT_PASSWORD: "LfTnT8RneaZhslRr"  # MongoDB Atlas password
+    command: mongod --replSet rs0  # (I don't fully understand for now, maybe comment it / get back to it later) Set up MongoDB as a replica set for Atlas 
+    ports:
+      - "27017:27017"  # Map port 27017 from the host to port 27017 in the container
+
+# A network configuration to separate the services
+# In this example, the default bridge network is used,
+# which allows the containers to communicate with each other using their service names as hostnames.
+networks:
+  motiv-app:
+    driver: bridge
