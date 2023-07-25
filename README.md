@@ -2,6 +2,14 @@
 
 #### Running the application for development
 
+
+#### To run the applications with docker-compose:
+* Need to have:
+    * Docker version 24.0.4 installed
+    * docker-compose version 1.29.2 installed
+    * To run the application you will not need to do the commands mentioned on the backend part and the frontend ones, Docker compose will take care of all of that. You will only need to run the following command:
+        * ```docker-compose up```
+
 ##### To run the backend part:
 * Need to have:
     * node18.12 installed
