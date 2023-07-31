@@ -34,7 +34,7 @@
 * you'll get a prompt menu on the top of your IDE, choose "attach to running container" and choose the "/motiv_backend-motiv-app_1" to work on VSCode for the backend.
 * Then redo the same thing for the "/motiv_frontend-motiv-app_1" to run the frontend part.
 
-##### To run the backend part:
+#### To run the backend part:
 * Need to have:
     * node18.12 installed
     * Mongodb installed
