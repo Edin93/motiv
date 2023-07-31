@@ -5,10 +5,13 @@
 
 #### To run the applications with docker-compose:
 * Need to have:
+    * PS: maybe you'll need to run the Docker and the docker compose commands with `sudo` (will get back to that issue later on).
     * Docker version 24.0.4 installed
     * docker-compose version 1.29.2 installed
     * To run the application you will not need to do the commands mentioned on the backend part and the frontend ones, Docker compose will take care of all of that. You will only need to run the following command:
         * ```docker-compose up```
+    * VERY IMPORTANT: each time we update the code of the frontend or the backend we need to rerun the `docker-compose` command with the following option `--build` so that the docker-compose can rebuild the docker images and containers with the newly updated code, so the full command is:
+        * ```docker-compose up --build```
 
 ##### To run the backend part:
 * Need to have:
