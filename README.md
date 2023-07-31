@@ -33,6 +33,7 @@
 * At this step you should have already run the docker-compose command so that your containers are already running.
 * you'll get a prompt menu on the top of your IDE, choose "attach to running container" and choose the "/motiv_backend-motiv-app_1" to work on VSCode for the backend.
 * Then redo the same thing for the "/motiv_frontend-motiv-app_1" to run the frontend part.
+* Once you're connected to the Docker containers on VSCode, you need to go to the project folder and for both the frontend and the backend it's this one: `/usr/src/app` (the one written as the WORKDIR in the Dockerfile).
 
 #### To run the backend part:
 * Need to have:
