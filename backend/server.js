@@ -18,9 +18,9 @@ db.once('open', () => console.log("Connected to DB"));
 
 app.use(express.json());
 
-const usersRouter = require("./routes/users");
+const userRouter = require("./routes/UserRouter");
 
-app.use("/users", usersRouter);
+app.use("/users", userRouter);
 
 app.listen(
     PORT,
