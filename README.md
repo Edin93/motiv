@@ -4,11 +4,10 @@
 * To run the application for development, you need to have the following installed on your machine:
     * Ubuntu 22.04.2 LTS (preferrably)
     * Git
-    * NVM
-    * NodeJS
+    * NVM (don't really need to because it'll be running on the backend Docker container but it can be useful if we encounter a Docker issue and we need to keep coding).
+    * NodeJS (don't really need to because it'll be running on the backend Docker container but it can be useful if we encounter a Docker issue and we need to keep coding).
     * Docker
     * Docker Compose
-    * VSCode (as the IDE)
     * ...
     * For more informations about the tools and their versions check the Technical part on [Notion](https://www.notion.so/Technical-b0b079be97bd4ef183235744489eccd1).
 
@@ -24,8 +23,16 @@
     * PS: maybe you'll need to run the Docker and the docker compose commands with `sudo` if you haven't done the previous steps.
     * To run the application you will not need to do the commands mentioned on the backend part and the frontend ones, Docker compose will take care of all of that. You will only need to run the following command:
         * ```docker-compose up```
-    * VERY IMPORTANT: each time we update the code of the frontend or the backend we need to rerun the `docker-compose` command with the following option `--build` so that the docker-compose can rebuild the docker images and containers with the newly updated code, so the full command is:
+    * VERY IMPORTANT: each time we update the code of the frontend or the backend IMAGES (i.e the Dockerfile files) we need to rerun the `docker-compose` command with the following option `--build` so that the docker-compose can rebuild the docker images and containers with the newly updated code, so the full command is:
         * ```docker-compose up --build```
+
+#### Coding in the Docker environments:
+* First, you need to install VSCode if you haven't yet.
+* look for the "Remote Development" extension on VSCode, created by Microsoft and install it.
+* After installing it you'll see a green bottom at the bottom left of your VSCode, click on it.
+* At this step you should have already run the docker-compose command so that your containers are already running.
+* you'll get a prompt menu on the top of your IDE, choose "attach to running container" and choose the "/motiv_backend-motiv-app_1" to work on VSCode for the backend.
+* Then redo the same thing for the "/motiv_frontend-motiv-app_1" to run the frontend part.
 
 ##### To run the backend part:
 * Need to have:
