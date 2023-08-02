@@ -1,37 +1,18 @@
-const express = require("express");
-const userRouter = express.Router();
-const UserModel = require("../models/UserModel");
+const auth = require('../controllers/auth');
+const userController = require('../controllers/UserController');
+const router = require('express').Router();
 
-const UserController = require("../controllers/UserController");
+// Authentification route
+router.post("/register", auth.signUp);
+router.post("/login", auth.signIn);
+router.get("/logout", auth.logout);
 
-// Getting all the users
-userRouter.get("/", UserController.getAllUsers);
+// user routes
+router.get("/", userController.getAllUsers);
+router.get("/:id", userController.getOneUser);
+router.put("/:id", userController.updateUser);
+router.delete("/:id", userController.deleteUser);
+router.patch("/follow/:id", userController.follow);
+router.patch("/unfollow/:id", userController.unfollow);
 
-// Getting one user
-userRouter.get("/:id", getUser, UserController.getOneUser);
-
-// Creating one user
-userRouter.post("/", UserController.CreateOneUser);
-
-// Updating one user
-userRouter.patch("/:id", getUser, UserController.UpdateOneUser);
-
-// Deleting one user
-userRouter.delete("/:id", getUser, UserController.DeleteOneUser);
-
-
-async function getUser(req, res, next) {
-    let user;
-    try {
-        user = await UserModel.findById(req.params.id);
-        if (user == null) {
-            return res.status(404).json({ message: "Cannot find user"});
-        }
-    } catch (err) {
-        return res.status(500).json({ message: err.message });
-    }
-    res.user = user;
-    next();
-};
-
-module.exports = userRouter;
+module.exports = router;

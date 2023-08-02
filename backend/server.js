@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const userRouter = require('./routes/UserRouter');
 
 const PORT = process.env.PORT || 5050;
 
@@ -17,10 +18,9 @@ db.on('error', (error) => console.error(error));
 db.once('open', () => console.log("Connected to the DB"));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const userRouter = require("./routes/UserRouter");
-
-app.use("/users", userRouter);
+app.use("/api/users", userRouter);
 
 app.listen(
     PORT,
