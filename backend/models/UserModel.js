@@ -4,20 +4,20 @@ const { isEmail } = require ('validator');
 
 const userSchema = new mongoose.Schema(
 {
-        username: {
-            type: String,
-            required: true,
-            unique: true,
-            minlength: 4,
-            maxlength: 20,
-            trim: true,
-        },
         email: {
             type: String,
             required: true,
             validate: [isEmail],
             lowercase: true,
             unique: true,
+            trim: true,
+        },
+        username: {
+            type: String,
+            required: true,
+            unique: true,
+            minlength: 4,
+            maxlength: 20,
             trim: true,
         },
         password: {
@@ -65,6 +65,13 @@ const userSchema = new mongoose.Schema(
         activities: {
             type: [String],
         },
+        tmp_code: {
+            type: Number,
+            default: null,
+        },
+        tmp_code_expiration: {
+            type: Date,
+        }
     },
     {
         timestamps: true,
