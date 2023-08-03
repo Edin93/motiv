@@ -3,7 +3,7 @@ const { signUpErrors, signInErrors } = require('../utils/error');
 const nodemailer = require('nodemailer');
 const { generateConfirmationEmailCode } = require('../utils/generateId');
 
-// Sign Up
+// Sign Up and send a email confirmation
 module.exports.signUp = async (req, res) => {
   const { username, email, password } = req.body;
   try {
