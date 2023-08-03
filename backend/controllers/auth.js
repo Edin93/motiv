@@ -1,5 +1,7 @@
 const User = require('../models/UserModel');
 const { signUpErrors, signInErrors } = require('../utils/error');
+const nodemailer = require('nodemailer');
+const { generateConfirmationEmailCode } = require('../utils/generateId');
 
 // Sign Up
 module.exports.signUp = async (req, res) => {
