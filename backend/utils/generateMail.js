@@ -3,7 +3,7 @@ const User = require('../models/UserModel');
 const { generateConfirmationEmailCode } = require('./generateId');
 
 // Send a email with a 4 digits code for confirm user's email
-module.exports.sendConfirmationMail = async (firstSend, user) => {
+module.exports.sendConfirmationMail = async (subject, user) => {
   const email = user.email;
   const tmp_code = generateConfirmationEmailCode();
   const tmp_code_expiration = new Date(Date.now() + 5 * 60 * 1000);
@@ -16,7 +16,7 @@ module.exports.sendConfirmationMail = async (firstSend, user) => {
     },
   });
   let mailOptions = {};
-  if (firstSend) {
+  if (subject === 'creation') {
     mailOptions = {
       from: "Motiv <maxence0@hotmail.fr>",
       to: user.email,
@@ -24,7 +24,7 @@ module.exports.sendConfirmationMail = async (firstSend, user) => {
       html: `Salut ${user.username} !
       Avant de pouvoir transpirer, confirme ton adresse email avec ce code: <b>${tmp_code}</b> !`,
     };
-  } else {
+  } else if (subject === 'resend') {
     mailOptions = {
       from: "Motiv <maxence0@hotmail.fr>",
       to: user.email,

@@ -7,7 +7,7 @@ module.exports.signUp = async (req, res) => {
   const { email, username, password } = req.body;
   try {
     const user = await User.create({ email, username, password });
-    sendConfirmationMail(first = true, user);
+    sendConfirmationMail(subject = 'creation', user);
     res.status(201).json({ user: user._id });
   } catch (error) {
     console.log(error);
@@ -31,7 +31,7 @@ module.exports.signIn = async (req, res) => {
 module.exports.sendEmailConfirmation = async (req, res) => {
   try {
     const user = await User.findOne({_id: req.params.id});
-    sendConfirmationMail(first = false, user);
+    sendConfirmationMail(subject = 'resend', user);
     res.status(200).json('Envoi du nouveau code!');
   } catch (error) {
     res.status(200).json(error);

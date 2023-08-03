@@ -6,7 +6,7 @@ const router = require('express').Router();
 router.post("/register", auth.signUp);
 router.post("/login", auth.signIn);
 router.post("/confirmEmail/:id", auth.confirmEmail);
-router.post("/sendEmailLost/:id", auth.sendEmailConfirmation);
+router.get("/sendEmailLost/:id", auth.sendEmailConfirmation);
 router.get("/logout", auth.logout);
 
 // user routes
