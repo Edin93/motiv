@@ -5,8 +5,11 @@ const router = require('express').Router();
 // Authentification route
 router.post("/register", auth.signUp);
 router.post("/login", auth.signIn);
-router.post("/confirmEmail/:id", auth.confirmEmail);
-router.get("/sendEmailLost/:id", auth.sendEmailConfirmation);
+router.post("/confirm-email/:id", auth.confirmEmail);
+router.get("/send-email-lost/:id", auth.sendConfirmationCode);
+router.post("/forgot-password", auth.sendResetPassword);
+router.post("/reset-password/:id", auth.resetPassword)
+
 router.get("/logout", auth.logout);
 
 // user routes

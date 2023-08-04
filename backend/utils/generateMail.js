@@ -32,6 +32,14 @@ module.exports.sendConfirmationMail = async (subject, user) => {
       html: `Alors ${user.username}, tu n'as pas rentrer le code à temps ?
       Vu qu'on est gentils en voilà un autre: <b>${tmp_code}</b> !`,
     };
+  } else if (subject === 'password') {
+    mailOptions = {
+      from: "Motiv <maxence0@hotmail.fr>",
+      to: user.email,
+      subject: "Réinitialisation du mot de passe",
+      html: `On a oublié son mot de passe ${user.username} ?
+      Voici ton code de confirmation pour en configurer un nouveau : <b>${tmp_code}</b> !`,
+    };
   }
 
   transporter.sendMail(mailOptions, function (error, info) {

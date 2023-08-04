@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
+        emailConfirm: {
+            type: Boolean,
+            default: false,
+        },
         region: {
             type: String,
             trim: true,
@@ -86,11 +90,16 @@ userSchema.pre("save", async function(next) {
 userSchema.statics.login = async function(email, password) {
     const user = await this.findOne({email});
     if (user) {
-        const auth = await bcrypt.compare(password, user.password);
-        if (auth) {
-            return user;
+        if(user.emailConfirm)
+        {
+
+            const auth = await bcrypt.compare(password, user.password);
+            if (auth) {
+                return user;
+            }
+            throw Error('incorrect password');
         }
-        throw Error('incorrect password');
+        throw Error('incorrect validation')
     }
     throw Error('incorrect email');
 }

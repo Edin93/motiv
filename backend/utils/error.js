@@ -25,7 +25,7 @@ module.exports.signUpErrors = (err) => {
 };
 
 module.exports.signInErrors = (err) => {
-  const errors = { email: '', password: '' };
+  const errors = { email: '', password: '', validation: '' };
 
   if (err.message.includes('email')) {
     errors.email = 'Email inconnue';
@@ -34,5 +34,10 @@ module.exports.signInErrors = (err) => {
   if (err.message.includes('password')) {
     errors.password = 'Mot de passe incorrect';
   }
+
+  if (err.message.includes("validation")) {
+    errors.validation = "Veuillez confirmer votre adresse email";
+  }
+
   return errors;
 };
