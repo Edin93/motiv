@@ -4,14 +4,6 @@ const { isEmail } = require ('validator');
 
 const userSchema = new mongoose.Schema(
 {
-        username: {
-            type: String,
-            required: true,
-            unique: true,
-            minlength: 4,
-            maxlength: 20,
-            trim: true,
-        },
         email: {
             type: String,
             required: true,
@@ -20,10 +12,26 @@ const userSchema = new mongoose.Schema(
             unique: true,
             trim: true,
         },
+        username: {
+            type: String,
+            required: true,
+            unique: true,
+            minlength: 4,
+            maxlength: 20,
+            trim: true,
+        },
         password: {
             type: String,
             required: true,
             trim: true,
+        },
+        hasToUpdatePassword: {
+            type: Boolean,
+            default: false
+        },
+        emailConfirm: {
+            type: Boolean,
+            default: false,
         },
         region: {
             type: String,
@@ -50,21 +58,22 @@ const userSchema = new mongoose.Schema(
         picture: {
             type: String,
         },
-        following: {
-        type: [String]
-        },
-        followers: {
-        type: [String]
-        },
-        notification: {
+        notifications: {
             type: [String],
         },
-        reviews: {
+        recommandations: {
             type: [String],
         },
         activities: {
             type: [String],
         },
+        tmp_code: {
+            type: Number,
+            default: null,
+        },
+        tmp_code_expiration: {
+            type: Date,
+        }
     },
     {
         timestamps: true,
@@ -79,11 +88,16 @@ userSchema.pre("save", async function(next) {
 userSchema.statics.login = async function(email, password) {
     const user = await this.findOne({email});
     if (user) {
-        const auth = await bcrypt.compare(password, user.password);
-        if (auth) {
-            return user;
+        if(user.emailConfirm)
+        {
+
+            const auth = await bcrypt.compare(password, user.password);
+            if (auth) {
+                return user;
+            }
+            throw Error('incorrect password');
         }
-        throw Error('incorrect password');
+        throw Error('incorrect validation')
     }
     throw Error('incorrect email');
 }
