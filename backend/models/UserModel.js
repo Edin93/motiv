@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
+        hasToUpdatePassword: {
+            type: Boolean,
+            default: false
+        },
         emailConfirm: {
             type: Boolean,
             default: false,
@@ -54,16 +58,10 @@ const userSchema = new mongoose.Schema(
         picture: {
             type: String,
         },
-        following: {
-        type: [String]
-        },
-        followers: {
-        type: [String]
-        },
-        notification: {
+        notifications: {
             type: [String],
         },
-        reviews: {
+        recommandations: {
             type: [String],
         },
         activities: {

@@ -56,7 +56,7 @@ module.exports.confirmEmail = async (req, res) => {
       } else {
         await User.updateOne(
           { _id: req.params.id },
-          { emailConfirm: true },
+          { emailConfirm: true, tmp_code: null, tmp_code_expiration: null },
           { new: true }
         );
         res.status(200).json('Email confirmé');
@@ -86,24 +86,22 @@ module.exports.sendResetPassword = async (req, res) => {
 };
 
 module.exports.resetPassword = async (req, res) => {
-  const { password, tmp_code } = req.body;
+  const { password, confirmPassword } = req.body;
   const user = await User.findOne({ _id: req.params.id });
   if (user) {
     try {
-      const currentTime = new Date();
-      if (currentTime > user.tmp_code_expiration) {
-        res.status(200).json('Code de confirmation expiré');
-      } else if (user.tmp_code != tmp_code) {
-        res.status(200).json('Code de confirmation incorrect')
-      } else {
-        const newPassword = await bcrypt.hash(password, 10);
-        await User.updateOne(
-          { _id: req.params.id },
-          { password: newPassword },
-          { new: true }
-        );
-        res.status(200).json('Réinitialisation du mot passe réussie');
-      }
+        if (password == confirmPassword) {
+          const newPassword = await bcrypt.hash(password, 10);
+          await User.updateOne(
+            { _id: req.params.id },
+            { password: newPassword, hasToUpdatePassword: false },
+            { new: true }
+            );
+            res.status(200).json('Réinitialisation du mot passe réussie');
+        }
+        else {
+          res.status(200).json({errors: "Les deux mots de passe ne correspondent pas"})
+        }
     } catch (error) {
       res.status(200).json({ error });
     }
