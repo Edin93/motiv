@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const User = require('../models/UserModel');
-const { generateConfirmationEmailCode, generateNewPassword } = require('./generateId');
+const { generateConfirmationEmailCode, generateNewPassword } = require('./generateCredentials');
 const bcrypt = require('bcrypt');
 
 // Send a email with a 4 digits code for confirm user's email
