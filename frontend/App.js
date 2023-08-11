@@ -1,20 +1,53 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import SignIn from './pages/SignIn';
+import SignUpFirstStep from './pages/SignUpFirstStep';
+import SignUpSecondStep from './pages/SignUpSecondStep';
+import ForgotPassword from './pages/ForgotPassword';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
+const navTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#FFF',
+  },
+};
+const options = {
+  headerTitleStyle: {
+    fontWeight: 'bold',
+  },
+  headerTintColor: 'black',
+};
+const screenOptions = {
+  headerBackTitle: ""
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Hello, motiv test</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer theme={navTheme}>
+      <Stack.Navigator screenOptions={screenOptions}>
+        <Stack.Screen
+          name="Identification"
+          component={SignIn}
+          options={options}
+        />
+        <Stack.Screen
+          name='Mot de passe oublié'
+          component={ForgotPassword}
+          options={options}
+        />
+        <Stack.Screen
+          name='Première étape'
+          component={SignUpFirstStep}
+          options={options}
+        />
+        <Stack.Screen
+          name='Seconde étape'
+          component={SignUpSecondStep}
+          options={options}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
