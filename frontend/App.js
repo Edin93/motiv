@@ -1,7 +1,7 @@
-import SignIn from './pages/SignIn';
-import SignUpFirstStep from './pages/SignUpFirstStep';
-import SignUpSecondStep from './pages/SignUpSecondStep';
-import ForgotPassword from './pages/ForgotPassword';
+import SignIn from './pages/auth/SignIn';
+import SignUpFirstStep from './pages/auth/SignUpFirstStep';
+import SignUpSecondStep from './pages/auth/SignUpSecondStep';
+import ForgotPassword from './pages/auth/ForgotPassword';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 

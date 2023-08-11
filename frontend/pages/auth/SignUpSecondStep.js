@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import DefaultInput from '../components/general/DefaultInput';
-import DefaultButton from '../components/general/DefaultButton';
+import DefaultInput from '../../components/general/DefaultInput';
+import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
 
 export default function SignUpSecondStep(props) {
