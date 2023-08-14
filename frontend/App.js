@@ -1,6 +1,8 @@
 import SignIn from './pages/auth/SignIn';
 import SignUpFirstStep from './pages/auth/SignUpFirstStep';
 import SignUpSecondStep from './pages/auth/SignUpSecondStep';
+import SignUpActivities from './pages/auth/SignUpActivities';
+import SignUpLocation from './pages/auth/SinUpLocation';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -45,6 +47,16 @@ export default function App() {
         <Stack.Screen
           name='Seconde étape'
           component={SignUpSecondStep}
+          options={options}
+        />
+        <Stack.Screen
+          name='Troisième étape'
+          component={SignUpActivities}
+          options={options}
+        />
+        <Stack.Screen
+          name='Dernière étape'
+          component={SignUpLocation}
           options={options}
         />
       </Stack.Navigator>

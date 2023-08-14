@@ -3,7 +3,7 @@ import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
 
-export default function SignUpSecondStep(props) {
+export default function SignUpSecondStep({navigation}) {
     const [lastName, onChangeLastName] = useState('');
     const [firstName, onChangeFirstName] = useState('');
     const [birthday, onChangeBirthday] = useState('');
@@ -12,7 +12,7 @@ export default function SignUpSecondStep(props) {
         <SafeAreaView style={[StyleSheet.container, {flex: 1}]}>
             <ScrollView automaticallyAdjustKeyboardInsets>
                 <Image
-                source={require('../assets/enlarge_logomotiv.png')}
+                source={require('../../assets/enlarge_logomotiv.png')}
                 style={styles.imageStyle}
                 />
                 <Text style={styles.mainTitle}>Encore un petit effort</Text>
@@ -42,7 +42,7 @@ export default function SignUpSecondStep(props) {
                     margin={20}
                     isNumeric={true}
                 />
-                <DefaultButton title="Suivant" />
+                <DefaultButton title="Suivant" onPress={() => navigation.navigate("Troisième étape")}/>
             </ScrollView>
         </SafeAreaView>
     );

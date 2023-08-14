@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import DefaultInput from '../components/general/DefaultInput';
-import DefaultButton from '../components/general/DefaultButton';
+import DefaultInput from '../../components/general/DefaultInput';
+import DefaultButton from '../../components/general/DefaultButton';
 import {
     StyleSheet,
     ScrollView,
@@ -19,7 +19,7 @@ export default function SignIn({navigation}) {
         <SafeAreaView style={{flex: 1}}>
             <ScrollView style={{marginBottom: 20}} automaticallyAdjustKeyboardInsets>
                 <Image
-                    source={require('../assets/enlarge_logomotiv.png')}
+                    source={require('../../assets/enlarge_logomotiv.png')}
                     style={styles.imageStyle}
                 />
                 <Text style={styles.mainTitle}>Content de te revoir !</Text>

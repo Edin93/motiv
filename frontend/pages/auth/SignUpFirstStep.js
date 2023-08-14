@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import DefaultInput from '../components/general/DefaultInput';
-import DefaultButton from '../components/general/DefaultButton';
+import DefaultInput from '../../components/general/DefaultInput';
+import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
 
 export default function SignUpFirstStep({navigation}) {
@@ -12,7 +12,7 @@ export default function SignUpFirstStep({navigation}) {
         <SafeAreaView style={[StyleSheet.container, {flex: 1}]}>
             <ScrollView automaticallyAdjustKeyboardInsets>
                 <Image
-                    source={require('../assets/enlarge_logomotiv.png')}
+                    source={require('../../assets/enlarge_logomotiv.png')}
                     style={styles.imageStyle}
                 />
                 <Text style={styles.mainTitle}>Bienvenue sur Motiv !</Text>

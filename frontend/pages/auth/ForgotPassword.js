@@ -1,29 +1,37 @@
 import React, { useState } from 'react';
-import DefaultInput from '../components/general/DefaultInput';
-import DefaultButton from '../components/general/DefaultButton';
-import { StyleSheet, ScrollView, SafeAreaView, View, Image, Text } from 'react-native';
+import DefaultInput from '../../components/general/DefaultInput';
+import DefaultButton from '../../components/general/DefaultButton';
+import { StyleSheet, ScrollView, SafeAreaView, Image, Text } from 'react-native';
 
 export default function ForgotPassword({navigation}) {
     const [email, onChangeEmail] = useState('');
+    const [isMailSent, setIsMailSent] = useState(false);
 
     return (
         <SafeAreaView style={{flex: 1}}>
             <ScrollView automaticallyAdjustKeyboardInsets>
                 <Image
-                    source={require('../assets/enlarge_logomotiv.png')}
+                    source={require('../../assets/enlarge_logomotiv.png')}
                     style={styles.imageStyle}
                 />
                 <Text style={styles.mainTitle}>Mot de passe oublié</Text>
-                <Text style={styles.subTitle}>Renseigne ton mail pour pouvoir réinisialiser ton mot de passe</Text>
-                <DefaultInput 
-                    customPlaceholder="Email"
-                    isPassword={false}
-                    icon="mail"
-                    text={email}
-                    onChangeText={onChangeEmail}
-                    margin={20}
-                />
-                <DefaultButton title="Envoyer"/>
+                
+                {isMailSent ? 
+                <Text style={styles.subTitle}>Un nouveau mot de passe a été envoyé par mail.</Text> :
+                <>
+                    <Text style={styles.subTitle}>Renseigne ton mail pour pouvoir réinitialiser ton mot de passe</Text>
+                    <DefaultInput 
+                        customPlaceholder="Email"
+                        isPassword={false}
+                        icon="mail"
+                        text={email}
+                        onChangeText={onChangeEmail}
+                        margin={20}
+                    />
+                    <DefaultButton title="Envoyer" onPress={() => setIsMailSent(true)}/>
+                </>
+                }
+                
             </ScrollView>
         </SafeAreaView>
         
