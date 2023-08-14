@@ -3,6 +3,9 @@ import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
 
+const MAINTITLE = "Encore un petit effort";
+const SUBTITLE = "Qui es-tu ?";
+
 export default function SignUpSecondStep({navigation}) {
     const [lastName, onChangeLastName] = useState('');
     const [firstName, onChangeFirstName] = useState('');
@@ -15,8 +18,8 @@ export default function SignUpSecondStep({navigation}) {
                 source={require('../../assets/enlarge_logomotiv.png')}
                 style={styles.imageStyle}
                 />
-                <Text style={styles.mainTitle}>Encore un petit effort</Text>
-                <Text style={styles.subTitle}>Qui es-tu ?</Text>
+                <Text style={styles.mainTitle}>{MAINTITLE}</Text>
+                <Text style={styles.subTitle}>{SUBTITLE}</Text>
                 <DefaultInput 
                     customPlaceholder="Nom"
                     isPassword={false}

@@ -3,6 +3,9 @@ import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
 
+const MAINTITLE = "Bienvenue sur Motiv !";
+const SUBTITLE = "Crée ton comtpe";
+
 export default function SignUpFirstStep({navigation}) {
     const [email, onChangeEmail] = useState('');
     const [password, onChangePassword] = useState('');
@@ -15,8 +18,8 @@ export default function SignUpFirstStep({navigation}) {
                     source={require('../../assets/enlarge_logomotiv.png')}
                     style={styles.imageStyle}
                 />
-                <Text style={styles.mainTitle}>Bienvenue sur Motiv !</Text>
-                <Text style={styles.subTitle}>Crée ton compte</Text>
+                <Text style={styles.mainTitle}>{MAINTITLE}</Text>
+                <Text style={styles.subTitle}>{SUBTITLE}</Text>
                 <DefaultInput 
                     customPlaceholder="Email"
                     isPassword={false}

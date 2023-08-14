@@ -3,6 +3,9 @@ import Activity from '../../components/general/Activity';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, View, Image, Text } from 'react-native';
 
+const MAIN_TITLE = "Tu y es presque...";
+const SUBTITLE = "Choisis tes activités";
+
 const activities = [
     {icon: 'basketball', iconColor: '#f26619', activity: 'Basket'},
     {icon: 'volleyball', iconColor: '#e8e4d8', activity: 'Volley'},
@@ -27,8 +30,8 @@ export default function SignUpActivities({navigation}) {
                 source={require('../../assets/enlarge_logomotiv.png')}
                 style={styles.imageStyle}
                 />
-                <Text style={styles.mainTitle}>Tu y es presque...</Text>
-                <Text style={styles.subTitle}>Choisis tes activités</Text>
+                <Text style={styles.mainTitle}>{MAIN_TITLE}</Text>
+                <Text style={styles.subTitle}>{SUBTITLE}</Text>
                 <ScrollView horizontal style={styles.activities} showsHorizontalScrollIndicator={false}>
                     <View style={{marginLeft: 20}}>
                        {activities.slice(0, 3).map((activity) => <Activity

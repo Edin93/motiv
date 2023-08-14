@@ -11,6 +11,9 @@ import {
     Text
 } from 'react-native';
 
+const MAIN_TITLE = "Content de te revoir !";
+const SUBTITLE = "Identifie-toi";
+
 export default function SignIn({navigation}) {
     const [email, onChangeEmail] = useState('');
     const [password, onChangePassword] = useState('');
@@ -22,8 +25,8 @@ export default function SignIn({navigation}) {
                     source={require('../../assets/enlarge_logomotiv.png')}
                     style={styles.imageStyle}
                 />
-                <Text style={styles.mainTitle}>Content de te revoir !</Text>
-                <Text style={styles.subTitle}>Identifie-toi</Text>
+                <Text style={styles.mainTitle}>{MAIN_TITLE}</Text>
+                <Text style={styles.subTitle}>{SUBTITLE}</Text>
                 <DefaultInput 
                     customPlaceholder="Email"
                     isPassword={false}

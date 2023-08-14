@@ -4,6 +4,9 @@ import { Dropdown } from 'react-native-element-dropdown';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
 
+const MAIN_TITLE = "Dernière étape !";
+const SUBTITLE = "Dans quelle ville te trouves-tu ?";
+
 const blackListedStates = ['CP', 'PF', 'TF', 'PM', 'BL', 'MF', 'WF']
 
 export default function SignUpLocation({navigation}) {
@@ -30,8 +33,8 @@ export default function SignUpLocation({navigation}) {
                 source={require('../../assets/enlarge_logomotiv.png')}
                 style={styles.imageStyle}
                 />
-                <Text style={styles.mainTitle}>Dernière étape !</Text>
-                <Text style={styles.subTitle}>Dans quelle ville te trouves-tu ?</Text>
+                <Text style={styles.mainTitle}>{MAIN_TITLE}</Text>
+                <Text style={styles.subTitle}>{SUBTITLE}</Text>
                 <Dropdown
                     style={[styles.dropdown, isFocus && { borderColor: '#f26619' }, {backgroundColor: '#ffffff'}]}
                     placeholderStyle={styles.placeholderStyle}
