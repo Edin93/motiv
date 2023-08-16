@@ -11,7 +11,6 @@ module.exports.signUp = async (req, res) => {
     sendConfirmationMail(subject = 'creation', user);
     res.status(201).json({ user: user._id });
   } catch (error) {
-    console.log(error);
     let errors = signUpErrors(error);
     res.status(200).json({errors});
   }
@@ -29,6 +28,7 @@ module.exports.signIn = async (req, res) => {
   }
 }
 
+// Send a email with a 4 digits code
 module.exports.sendConfirmationCode = async (req, res) => {
   const user = await User.findOne({_id: req.params.id});
   if (user) {
@@ -43,6 +43,7 @@ module.exports.sendConfirmationCode = async (req, res) => {
   }
 }
 
+// Confirm the email of the user
 module.exports.confirmEmail = async (req, res) => {
   const { tmp_code } = req.body;
   const user = await User.findOne({ _id: req.params.id});
@@ -70,6 +71,8 @@ module.exports.confirmEmail = async (req, res) => {
   
 }
 
+// Send an email with a new password generated randomly and
+// pass hasToUpdatePasdword to true
 module.exports.sendResetPassword = async (req, res) => {
   const email = req.body.email;
   const user = await User.findOne({ email });
@@ -85,6 +88,7 @@ module.exports.sendResetPassword = async (req, res) => {
   }
 };
 
+// Reset the password and pass hasToUpdatePasdword to false
 module.exports.resetPassword = async (req, res) => {
   const { password, confirmPassword } = req.body;
   const user = await User.findOne({ _id: req.params.id });
@@ -110,6 +114,7 @@ module.exports.resetPassword = async (req, res) => {
   }
 };
 
+// Log out function
 module.exports.logout = (req, res) => {
   res.redirect('/');
 }

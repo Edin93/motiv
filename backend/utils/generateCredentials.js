@@ -33,6 +33,5 @@ module.exports.generateNewPassword = () => {
 
   password = password.split('').sort(() => Math.random() - 0.5).join('');
 
-  console.log(password);
   return password;
 }

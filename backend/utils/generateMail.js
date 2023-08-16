@@ -6,9 +6,10 @@ const bcrypt = require('bcrypt');
 // Send a email with a 4 digits code for confirm user's email
 module.exports.sendConfirmationMail = async (subject, user) => {
   const email = user.email;
+  let tmp_code, tmp_code_expiration;
   if (subject == 'creation' || subject == 'resend') {
-    const tmp_code = generateConfirmationEmailCode();
-    const tmp_code_expiration = new Date(Date.now() + 5 * 60 * 1000);
+    tmp_code = generateConfirmationEmailCode();
+    tmp_code_expiration = new Date(Date.now() + 5 * 60 * 1000);
     await User.findOneAndUpdate({ email }, { tmp_code, tmp_code_expiration}, { new: true });
   }
   var transporter = nodemailer.createTransport({
