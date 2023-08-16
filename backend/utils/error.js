@@ -41,3 +41,18 @@ module.exports.signInErrors = (err) => {
 
   return errors;
 };
+
+
+module.exports.createRegionsErrors = (err) => {
+  if (err.message.includes('name') && err.code === 11000) {
+    return 'Cette région existe déjà';
+  }
+  return err;
+}
+
+module.exports.createCitiesErrors = (err) => {
+  if (err.message.includes('name') && err.code === 11000) {
+    return 'Cette ville existe déjà';
+  }
+  return err;
+}
