@@ -10,15 +10,16 @@ module.exports.signUpErrors = (err) => {
   }
 
   if (err.message.includes('password')) {
-    errors.password = 'Votre mot de passe est trop court';
+    errors.password = "Le mot de passe doit contenir entre 6 et 20 caractères " +
+    "comprenant au minimum une lettre minuscule, une lettre majuscule, un chiffre et un symbole";
   }
 
   if (err.message.includes('email') && err.code === 11000) {
-    errors.email = 'Cet email est déjà utilisé';
+    errors.email = 'Email déjà utilisé';
   }
 
   if (err.message.includes('username') && err.code === 11000) {
-    errors.username = 'Ce pseudo est déjà pris';
+    errors.username = 'Pseudo déjà pris';
   }
   
   return errors;
@@ -41,18 +42,3 @@ module.exports.signInErrors = (err) => {
 
   return errors;
 };
-
-
-module.exports.createRegionsErrors = (err) => {
-  if (err.message.includes('name') && err.code === 11000) {
-    return 'Cette région existe déjà';
-  }
-  return err;
-}
-
-module.exports.createCitiesErrors = (err) => {
-  if (err.message.includes('name') && err.code === 11000) {
-    return 'Cette ville existe déjà';
-  }
-  return err;
-}

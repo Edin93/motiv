@@ -9,6 +9,8 @@ router.post("/confirm-email/:id", auth.confirmEmail);
 router.get("/send-email-lost/:id", auth.sendConfirmationCode);
 router.post("/forgot-password", auth.sendResetPassword);
 router.post("/reset-password/:id", auth.resetPassword);
+router.post("/check-email-password", auth.checkEmailPassword);
+router.post("/check-username", auth.checkUsername);
 
 router.get("/logout", auth.logout);
 
