@@ -5,9 +5,8 @@ const { sendConfirmationMail } = require('../utils/generateMail');
 
 // Sign Up and send a email confirmation
 module.exports.signUp = async (req, res) => {
-  const { email, username, password } = req.body;
   try {
-    const user = await User.create({ email, username, password });
+    const user = await User.create({ ...req.body });
     sendConfirmationMail(subject = 'creation', user);
     res.status(201).json({ user: user._id });
   } catch (error) {
@@ -66,7 +65,7 @@ module.exports.confirmEmail = async (req, res) => {
       res.status(200).json({ error });
     }
   } else {
-    res.status(200).json({ errors: "Email inconnue" });
+    res.status(200).json({ errors: "Email inconnu" });
   }
   
 }
@@ -84,7 +83,7 @@ module.exports.sendResetPassword = async (req, res) => {
       res.status(200).json({ error });
     }
   } else {
-    res.status(200).json({ errors: "Email inconnue" });
+    res.status(200).json({ errors: "Email inconnu" });
   }
 };
 
@@ -110,11 +109,51 @@ module.exports.resetPassword = async (req, res) => {
       res.status(200).json({ error });
     }
   } else {
-    res.status(200).json({ errors: "Email inconnue" });
+    res.status(200).json({ errors: "Email inconnu" });
+  }
+};
+
+// Check if the email already exists and if password is secure
+module.exports.checkEmailPassword = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  const errors = { email: '', password: ''};
+  if (user)
+    errors.email = 'Email déjà utilisé';
+  else {
+    if (password.length < 6 ||
+      !/[a-z]/.test(password) ||
+      !/[A-Z]/.test(password) ||
+      !/\d/.test(password) ||
+      !/[^a-zA-Z0-9]/.test(password))
+    {
+      errors.password = "Le mot de passe doit contenir entre 6 et 20 caractères " +
+      "comprenant au minimum une lettre minuscule, une lettre majuscule, un chiffre et un symbole";
+    }
+  }
+  if (errors.email || errors.password)
+    res.status(200).json({ errors });
+  else
+    res.status(200).json("Etape suivante");
+};
+
+// Check if username already exists
+module.exports.checkUsername = async (req, res) => {
+  const { username } = req.body;
+  const user = await User.findOne({ username });
+  console.log(user);
+  if (user)
+    res.status(200).json('Pseudo déjà pris');
+  else {
+    if (username.length < 4 || username.length > 20) {
+      const errors = {username: 'Le pseudo doit contenir entre 4 et 20 caractères'};
+      res.status(200).json({ errors });
+    } else
+      res.status(200).json('Etape suivante');
   }
 };
 
 // Log out function
 module.exports.logout = (req, res) => {
   res.redirect('/');
-}
+};

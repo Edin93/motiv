@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const { isEmail } = require ('validator');
+const regionSchema = require("./regionModel");
+const citySchema = require("./cityModel");
 
 const userSchema = new mongoose.Schema(
 {
@@ -34,11 +36,11 @@ const userSchema = new mongoose.Schema(
             default: false,
         },
         region: {
-            type: String,
+            type: regionSchema,
             trim: true,
         },
         city: {
-            type: String,
+            type: citySchema,
             trim: true,
         },
         biography: {
