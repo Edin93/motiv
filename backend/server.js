@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const activityRouter = require('./routes/ActivityRouter');
 const userRouter = require('./routes/UserRouter');
 
 const PORT = process.env.PORT || 5050;
@@ -20,6 +21,7 @@ db.once('open', () => console.log("Connected to the DB"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/api/activities", activityRouter);
 app.use("/api/users", userRouter);
 
 app.listen(

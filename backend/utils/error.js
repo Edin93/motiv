@@ -42,3 +42,21 @@ module.exports.signInErrors = (err) => {
 
   return errors;
 };
+
+module.exports.createActivityErrors = (err) => {
+  const errors = { name: '', rules: '', icon: ''};
+
+  if (err.message.includes('name')) {
+    errors.name = "Nom de l'activité obligatoire";
+  }
+
+  if (err.message.includes('rules')) {
+    errors.rules = "Règles de l'activité obligatoires";
+  }
+
+  if (err.message.includes('name') && err.code === 11000) {
+    errors.name = 'Cette activité existe déjà';
+  }
+
+  return errors;
+}
