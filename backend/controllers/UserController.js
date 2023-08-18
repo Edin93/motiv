@@ -1,6 +1,5 @@
 // User function
 const User = require('../models/UserModel');
-const ObjectId = require('mongoose').Types.ObjectId;
 
 // Get all users without the password
 module.exports.getAllUsers = (req, res) => {
