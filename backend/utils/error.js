@@ -6,7 +6,7 @@ module.exports.signUpErrors = (err) => {
   }
 
   if (err.message.includes('username')) {
-    errors.username = 'Votre pseudo doit comporter entre 4 et 20 caractères';
+    errors.username = 'Votre pseudo doit comporter entre 5 et 20 caractères';
   }
 
   if (err.message.includes('password')) {

@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-            minlength: 4,
+            minlength: 5,
             maxlength: 20,
             trim: true,
         },
@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true,
+        },
+        firstname: {
+            type: String,
+            trim: true,
+        },
+        lastname: {
+            type: String,
+            trim: true
         },
         hasToUpdatePassword: {
             type: Boolean,
@@ -64,6 +72,9 @@ const userSchema = new mongoose.Schema(
             type: [String],
         },
         recommandations: {
+            type: [String],
+        },
+        refferal: {
             type: [String],
         },
         activities: {

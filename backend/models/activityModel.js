@@ -11,9 +11,11 @@ const activitySchema = new mongoose.Schema(
     icon: {
       type: String,
     },
+    iconColor: {
+      type: String,
+    },
     rules: {
       type: String,
-      required: true,
     },
   }
 );

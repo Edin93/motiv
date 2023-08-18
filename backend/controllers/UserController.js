@@ -1,5 +1,6 @@
 // User function
 const User = require('../models/UserModel');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 // Get all users without the password
 module.exports.getAllUsers = (req, res) => {
@@ -26,5 +27,31 @@ module.exports.updateUser = (req, res) => {
 module.exports.deleteUser = (req, res) => {
   User.deleteOne({ _id: req.params.id })
     .then(() => res.status(200).json({ message: 'User deleted !' }))
+    .catch(error => res.status(200).json({ error }));
+};
+
+// Recommand a user
+module.exports.recommend = (req, res) => {
+  if (!(ObjectId.isValid(req.params.id) || ObjectId.isValid(req.body.idToRecommand))) {
+    return res.status(400).send('Id inconnu');
+  }
+  User.findByIdAndUpdate(req.params.id, { $addToSet: { refferal: req.body.idToRecommand } }, {new: true})
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(200).json({ error }));
+
+  User.findByIdAndUpdate(req.body.idToRecommand, { $addToSet: { recommandations: req.params.id } })
+    .catch(error => res.status(200).json({ error }));
+};
+
+// Delete a recommandation for a user
+module.exports.deleteRecommendation = (req, res) => {
+  if (!(ObjectId.isValid(req.params.id) || ObjectId.isValid(req.body.idToDelete))) {
+    return res.status(200).send('Id inconnu');
+  }
+  User.findByIdAndUpdate(req.params.id, { $pull: { refferal: req.body.idToDelete } }, {new: true})
+    .then(() => res.status(200).json({ message: 'Recommandation enlevée' }))
+    .catch(error => res.status(200).json({ error }));
+
+  User.findByIdAndUpdate(req.body.idToDelete, { $pull: { recommandations: req.params.id } })
     .catch(error => res.status(200).json({ error }));
 };
