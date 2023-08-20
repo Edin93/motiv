@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Snackbar } from '@react-native-material/core';
 import Activity from '../../components/general/Activity';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, View, Image, Text } from 'react-native';
@@ -23,6 +24,21 @@ const activities = [
 ];
 
 export default function SignUpActivities({navigation}) {
+    const [snackBarVisible, setSnackBarVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const selectedActivities = [];
+
+    const handleSubmit = () => {
+        if (selectedActivities.length < 1) {
+            setSnackBarVisible(true);
+            setErrorMessage('Vous devez selectionner au moins une activité');
+        } else {
+            setSnackBarVisible(false);
+            navigation.navigate('Dernière étape');
+        }
+    };
+
     return (
         <SafeAreaView style={[StyleSheet.container, {flex: 1}]}>
             <ScrollView automaticallyAdjustKeyboardInsets>
@@ -38,40 +54,51 @@ export default function SignUpActivities({navigation}) {
                                                                     key={activity.activity}
                                                                     icon={activity.icon}
                                                                     iconColor={activity.iconColor}
-                                                                    activity={activity.activity}/>)} 
+                                                                    activity={activity.activity}
+                                                                    select={() => selectedActivities.push(activity)}
+                                                                    unselect={() => selectedActivities.pop(activity)}/>)} 
                     </View>
                     <View>
                        {activities.slice(3, 6).map((activity) => <Activity
                                                                     key={activity.activity}
                                                                     icon={activity.icon}
                                                                     iconColor={activity.iconColor}
-                                                                    activity={activity.activity}/>)} 
+                                                                    activity={activity.activity}
+                                                                    select={() => selectedActivities.push(activity)}
+                                                                    unselect={() => selectedActivities.pop(activity)}/>)} 
                     </View>
                     <View>
                        {activities.slice(6, 9).map((activity) => <Activity
                                                                     key={activity.activity}
                                                                     icon={activity.icon}
                                                                     iconColor={activity.iconColor}
-                                                                    activity={activity.activity}/>)} 
+                                                                    activity={activity.activity}
+                                                                    select={() => selectedActivities.push(activity)}
+                                                                    unselect={() => selectedActivities.pop(activity)}/>)} 
                     </View>
                     <View>
                        {activities.slice(9, 12).map((activity) => <Activity
                                                                     key={activity.activity}
                                                                     icon={activity.icon}
                                                                     iconColor={activity.iconColor}
-                                                                    activity={activity.activity}/>)} 
+                                                                    activity={activity.activity}
+                                                                    select={() => selectedActivities.push(activity)}
+                                                                    unselect={() => selectedActivities.pop(activity)}/>)} 
                     </View>
                     <View style={{marginRight: 20}}>
                        {activities.slice(12,).map((activity) => <Activity
                                                                     key={activity.activity}
                                                                     icon={activity.icon}
                                                                     iconColor={activity.iconColor}
-                                                                    activity={activity.activity}/>)} 
+                                                                    activity={activity.activity}
+                                                                    select={() => selectedActivities.push(activity)}
+                                                                    unselect={() => selectedActivities.pop(activity)}/>)} 
                     </View>
                 </ScrollView>
                 
-                <DefaultButton title="Suivant" onPress={() => navigation.navigate('Dernière étape')}/>
+                <DefaultButton title="Suivant" onPress={handleSubmit}/>
             </ScrollView>
+            {snackBarVisible && <Snackbar message={errorMessage} style={styles.snackBar}/>}
         </SafeAreaView>
     );
 }
@@ -100,5 +127,9 @@ const styles = StyleSheet.create({
     activities: {
         paddingTop: 30,
         paddingBottom: 10
+    },
+    snackBar: {
+        backgroundColor: 'red',
+        marginHorizontal: 10
     }
 });

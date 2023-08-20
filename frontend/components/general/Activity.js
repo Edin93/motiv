@@ -6,7 +6,9 @@ export default function Activity(props) {
     const {
         icon,
         iconColor,
-        activity
+        activity,
+        select,
+        unselect
     } = props;
 
     const [isSelected, setIsSelected] = useState(false);
@@ -21,8 +23,17 @@ export default function Activity(props) {
         setIsSelected(isSelected);
     }
 
+    const handleOnPress = (isSelected) => {
+        if (isSelected) {
+            select();
+        } else {
+            unselect();
+        }
+        selectActivity(isSelected);  
+    };
+
     return (
-        <Pressable onPress={() => selectActivity(!isSelected)}>
+        <Pressable onPress={() => handleOnPress(!isSelected)}>
             <View style={[styles.sectionStyle, {borderWidth: customBorderWidth}]}>
                 <Text style={styles.iconStyle}>
                     <Icon name={icon} size={40} color={iconColor}/>

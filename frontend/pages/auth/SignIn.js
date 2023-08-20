@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { Snackbar } from '@react-native-material/core';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import {
+    ActivityIndicator,
     StyleSheet,
     ScrollView,
     SafeAreaView,
@@ -17,10 +19,17 @@ const SUBTITLE = "Identifie-toi";
 export default function SignIn({navigation}) {
     const [email, onChangeEmail] = useState('');
     const [password, onChangePassword] = useState('');
+    const [snackBarVisible, setSnackBarVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const checkCredentials = () => {
+        setLoading(true);
+    };
 
     return (
         <SafeAreaView style={{flex: 1}}>
-            <ScrollView style={{marginBottom: 20}} automaticallyAdjustKeyboardInsets>
+            <ScrollView automaticallyAdjustKeyboardInsets>
                 <Image
                     source={require('../../assets/enlarge_logomotiv.png')}
                     style={styles.imageStyle}
@@ -46,7 +55,7 @@ export default function SignIn({navigation}) {
                 <Pressable onPressIn={() => navigation.navigate('Mot de passe oublié')}>
                     <Text style={styles.subTitle}>Mot de passe oublié</Text>
                 </Pressable>
-                <DefaultButton title="S'identifier"/>
+                {loading ? <ActivityIndicator color='#f26619'/> : <DefaultButton title="S'identifier" onPress={checkCredentials}/>}
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{flex: 1, height: 1, backgroundColor: 'black', marginLeft: 50}} />
                 <View>
@@ -57,8 +66,8 @@ export default function SignIn({navigation}) {
                 <Text style={styles.subTitle}>Tu n'as pas de compte ?</Text>
                 <DefaultButton title="Créer un compte" onPress={() => navigation.navigate('Première étape')}/>
             </ScrollView>
-        </SafeAreaView>
-        
+            {snackBarVisible && <Snackbar message='hello' style={styles.snackBar}/>}
+        </SafeAreaView> 
     );
 }
 
@@ -81,5 +90,8 @@ const styles = StyleSheet.create({
         width: '60%',
         height: 120,
         alignSelf: 'center'
+    },
+    snackBar: {
+        backgroundColor: 'red',
     }
 });

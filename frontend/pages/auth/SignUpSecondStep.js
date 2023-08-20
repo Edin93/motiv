@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Snackbar } from '@react-native-material/core';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
@@ -6,10 +7,38 @@ import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native'
 const MAINTITLE = "Encore un petit effort";
 const SUBTITLE = "Qui es-tu ?";
 
+function  isOver15YearsOld(dateString) {
+    const [day, month, year] = dateString.split('/').map(Number);
+    const birthDate = new Date(year, month - 1, day);
+    const currentDate = new Date();
+    const differenceInMillis = currentDate - birthDate;
+    const differenceInYears = differenceInMillis / (1000 * 60 * 60 * 24 * 365.25);
+    return differenceInYears > 15;
+}
+
 export default function SignUpSecondStep({navigation}) {
     const [lastName, onChangeLastName] = useState('');
     const [firstName, onChangeFirstName] = useState('');
+    const [username, onChangeUsername] = useState('');
     const [birthday, onChangeBirthday] = useState('');
+    const [snackBarVisible, setSnackBarVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleSubmit = () => {
+        if (!lastName || !firstName || !username || !birthday) {
+            setSnackBarVisible(true);
+            setErrorMessage('Tous les champs doivent être remplis');
+        } else if (username.length < 5) {
+            setSnackBarVisible(true);
+            setErrorMessage('Le nom d\'utilisateur doit comporter au moins 5 charactères');
+        } else if (!isOver15YearsOld(birthday)) {
+            setSnackBarVisible(true);
+            setErrorMessage('Vous devez avoir plus de 15 ans pour continuer');
+        } else {
+            setSnackBarVisible(false);
+            navigation.navigate("Troisième étape");
+        }
+    };
 
     return (
         <SafeAreaView style={[StyleSheet.container, {flex: 1}]}>
@@ -37,7 +66,15 @@ export default function SignUpSecondStep({navigation}) {
                     margin={20}
                 />
                 <DefaultInput 
-                    customPlaceholder="Date de naissance"
+                    customPlaceholder="Nom d'utilisateur"
+                    isPassword={false}
+                    icon="user"
+                    text={username}
+                    onChangeText={onChangeUsername}
+                    margin={20}
+                />
+                <DefaultInput 
+                    customPlaceholder="Date de naissance JJ/MM/AAAA"
                     isPassword={false}
                     icon="calendar"
                     text={birthday}
@@ -45,8 +82,9 @@ export default function SignUpSecondStep({navigation}) {
                     margin={20}
                     isNumeric={true}
                 />
-                <DefaultButton title="Suivant" onPress={() => navigation.navigate("Troisième étape")}/>
+                <DefaultButton title="Suivant" onPress={handleSubmit}/>
             </ScrollView>
+            {snackBarVisible && <Snackbar message={errorMessage} style={styles.snackBar}/>}
         </SafeAreaView>
     );
 }
@@ -71,5 +109,9 @@ const styles = StyleSheet.create({
         width: '60%',
         height: 110,
         alignSelf: 'center'
+    },
+    snackBar: {
+        backgroundColor: 'red',
+        marginHorizontal: 10
     }
 });
