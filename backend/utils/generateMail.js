@@ -13,7 +13,7 @@ module.exports.sendConfirmationMail = async (subject, user) => {
     await User.findOneAndUpdate({ email }, { tmp_code, tmp_code_expiration}, { new: true });
   }
   var transporter = nodemailer.createTransport({
-    service: 'hotmail',
+    service: 'gmail',
     auth: {
       user: process.env.EMAIL_MOTIV,
       pass: process.env.EMAIL_MOTIVPASSWORD,
@@ -22,7 +22,7 @@ module.exports.sendConfirmationMail = async (subject, user) => {
   let mailOptions = {};
   if (subject === 'creation') {
     mailOptions = {
-      from: "Motiv <maxence0@hotmail.fr>",
+      from: "remi.marcais87@gmail.com",
       to: user.email,
       subject: "Bienvenue sur Motiv",
       html: `Salut ${user.username} !
@@ -30,10 +30,10 @@ module.exports.sendConfirmationMail = async (subject, user) => {
     };
   } else if (subject === 'resend') {
     mailOptions = {
-      from: "Motiv <maxence0@hotmail.fr>",
+      from: "remi.marcais87@gmail.com",
       to: user.email,
       subject: "Renvoi du code de confirmation",
-      html: `Alors ${user.username}, tu n'as pas rentrer le code à temps ?
+      html: `Alors ${user.username}, tu n'as pas renté le code à temps ?
       Vu qu'on est gentils en voilà un autre: <b>${tmp_code}</b> !`,
     };
   } else if (subject === 'password') {
@@ -45,7 +45,7 @@ module.exports.sendConfirmationMail = async (subject, user) => {
       {new: true}
     )
     mailOptions = {
-      from: "Motiv <maxence0@hotmail.fr>",
+      from: "remi.marcais87@gmail.com",
       to: user.email,
       subject: "Réinitialisation du mot de passe",
       html: `On a oublié son mot de passe ${user.username} ?

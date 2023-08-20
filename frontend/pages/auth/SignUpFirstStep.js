@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { Snackbar } from '@react-native-material/core';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
@@ -10,6 +12,36 @@ export default function SignUpFirstStep({navigation}) {
     const [email, onChangeEmail] = useState('');
     const [password, onChangePassword] = useState('');
     const [confirmPassword, onChangeConfirmPassword] = useState('');
+    const [snackBarVisible, setSnackBarVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleSubmit = async () => {
+        if (!email || !password || !confirmPassword) {
+            setSnackBarVisible(true);
+            setErrorMessage('Tous les champs doivent être remplis');
+        } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            setSnackBarVisible(true);
+            setErrorMessage('Adresse email invalide');
+        } else if (password !== confirmPassword) {
+            setSnackBarVisible(true);
+            setErrorMessage('Les deux mots de passe sont différents');
+        } else {
+            try {
+                const config = {
+                    headers: {
+                        'content-type': 'Application/json',
+                        Accept: '*/*',
+                    }
+                }
+                const response = await axios.post('https://localhost:3000/api/users/check-email-password', {email: email, password: password}, config);
+                //console.log(response.data);
+                setSnackBarVisible(false);
+                navigation.navigate('Seconde étape');
+            } catch (e) {
+                console.log(e);
+            }
+        }    
+    };
 
     return (
         <SafeAreaView style={[StyleSheet.container, {flex: 1}]}>
@@ -44,8 +76,9 @@ export default function SignUpFirstStep({navigation}) {
                     onChangeText={onChangeConfirmPassword}
                     margin={20}
                 />
-                <DefaultButton title="Suivant" onPress={() => navigation.navigate('Seconde étape')}/>
+                <DefaultButton title="Suivant" onPress={handleSubmit}/>
             </ScrollView>
+            {snackBarVisible && <Snackbar message={errorMessage} style={styles.snackBar}/>}
         </SafeAreaView>
     );
 }
@@ -70,5 +103,9 @@ const styles = StyleSheet.create({
         width: '60%',
         height: 110,
         alignSelf: 'center'
+    },
+    snackBar: {
+        backgroundColor: 'red',
+        marginHorizontal: 10
     }
 });

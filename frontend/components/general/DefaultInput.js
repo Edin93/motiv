@@ -14,6 +14,7 @@ export default function DefaultInput(props) {
     } = props;
 
     const [customBorderWidth, setBorderWidth] = useState(0);
+    const [showPassword, setShowPassword] = useState(false);
 
     const customOnFocus = () => {setBorderWidth(2);};
     const customOnBlur = () => {setBorderWidth(0);};
@@ -37,7 +38,7 @@ export default function DefaultInput(props) {
                 <Icon name={icon} style={styles.iconStyle} size={20} color='#B6B6B6'/>
             </Text>
             <TextInput
-                secureTextEntry={isPassword}
+                secureTextEntry={isPassword && !showPassword}
                 onFocus={customOnFocus}
                 onBlur={customOnBlur}
                 style={styles.input}
@@ -49,6 +50,9 @@ export default function DefaultInput(props) {
                 maxLength={isNumeric ? 10 : 40}
                 keyboardType={isNumeric ? 'numeric' : 'default'}
             />
+            {isPassword && text != '' && <Text style={{marginRight: 20}} onPress={() => setShowPassword(!showPassword)}>
+                <Icon name={showPassword ? 'eye-off' : 'eye'} style={styles.iconStyle} size={20} color='#B6B6B6'/>
+            </Text>}
         </View>
         
     );

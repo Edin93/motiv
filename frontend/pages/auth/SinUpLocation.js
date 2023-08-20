@@ -36,12 +36,11 @@ export default function SignUpLocation({navigation}) {
                 <Text style={styles.mainTitle}>{MAIN_TITLE}</Text>
                 <Text style={styles.subTitle}>{SUBTITLE}</Text>
                 <Dropdown
-                    style={[styles.dropdown, isFocus && { borderColor: '#f26619' }, {backgroundColor: '#ffffff'}]}
+                    style={[styles.dropdown, isFocus, {backgroundColor: '#ffffff'}]}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
                     data={stateData}
-                    search
                     maxHeight={300}
                     labelField="name"
                     valueField="name"
@@ -57,7 +56,7 @@ export default function SignUpLocation({navigation}) {
                 />
                 <Dropdown
                     automaticallyAdjustKeyboardInsets
-                    style={[styles.dropdown, isFocus && { borderColor: '#f26619' }, {backgroundColor: '#ffffff'}]}
+                    style={[styles.dropdown, isFocus, {backgroundColor: '#ffffff'}]}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
