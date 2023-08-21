@@ -38,3 +38,5 @@ app.listen(
         console.log("Server has started on port: " + PORT);
     },
 );
+
+// TEST 1 - dump comment to check pushing from a docker container.
