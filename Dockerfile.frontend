@@ -8,14 +8,20 @@ ENV EXPO_USE_DEV_SERVER=true
 # Step 4: Set up the working directory
 WORKDIR /usr/src/app/frontend
 
+# step 4.1: Install the Expo CLI globally
+RUN npm install -g expo-cli
+
 # Step 5: Copy package.json and package-lock.json (if available) to leverage Docker caching
 COPY frontend/package*.json ./
 
 # Step 6: Install Node.js dependencies
 RUN npm install
 
-# Copy the .git folder into the container's frontend folder
-COPY .git .git/
+# Step 9: Copy the rest of the React Native project files
+COPY frontend/ ./
+
+# Copy the .git folder into the container's backend folder
+COPY .git /usr/src/app/.git/
 
 # Step 7: Expose the port for Expo development server (Metro Bundler)
 EXPOSE 19000
@@ -23,9 +29,6 @@ EXPOSE 19001
 
 # Step 8: Expose the port for the Expo web interface
 EXPOSE 19006
-
-# Step 9: Copy the rest of the React Native project files
-COPY . .
 
 # Step 10: Specify the command to start the Expo development server
 CMD ["npm", "run", "start"]

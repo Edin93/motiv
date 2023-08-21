@@ -30,6 +30,8 @@ services:
     working_dir: /usr/src/app/backend
     networks:
       - motiv-app
+    depends_on:
+      - backend-motiv-app
 
   # Service for MongoDB Atlas (Cloud MongoDB)
   mongodb:
