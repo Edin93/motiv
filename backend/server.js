@@ -9,11 +9,7 @@ const PORT = process.env.PORT || 5050;
 
 const app = express();
 
-const corsOptions = {
-    origin: process.env.URL_CLIENT,
-}
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 mongoose.connect(
     process.env.DB_URL,

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Snackbar } from '@react-native-material/core';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
-import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, Image, Text, ActivityIndicator } from 'react-native';
 
 const MAINTITLE = "Encore un petit effort";
 const SUBTITLE = "Qui es-tu ?";
@@ -16,28 +17,50 @@ function  isOver15YearsOld(dateString) {
     return differenceInYears > 15;
 }
 
-export default function SignUpSecondStep({navigation}) {
+export default function SignUpSecondStep({route, navigation}) {
     const [lastName, onChangeLastName] = useState('');
     const [firstName, onChangeFirstName] = useState('');
     const [username, onChangeUsername] = useState('');
     const [birthday, onChangeBirthday] = useState('');
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        setLoading(true);
         if (!lastName || !firstName || !username || !birthday) {
             setSnackBarVisible(true);
             setErrorMessage('Tous les champs doivent être remplis');
         } else if (username.length < 5) {
             setSnackBarVisible(true);
-            setErrorMessage('Le nom d\'utilisateur doit comporter au moins 5 charactères');
+            setErrorMessage('Le nom d\'utilisateur doit comporter au moins 5 caractères');
         } else if (!isOver15YearsOld(birthday)) {
             setSnackBarVisible(true);
             setErrorMessage('Vous devez avoir plus de 15 ans pour continuer');
         } else {
-            setSnackBarVisible(false);
-            navigation.navigate("Troisième étape");
+            try {
+                const response = await axios.post('http://192.168.1.17:3000/api/users/check-username', {username});
+                const error = response.data.errors.message;
+
+                if (error) {
+                    setSnackBarVisible(true);
+                    setErrorMessage(error);
+                } else {
+                    setSnackBarVisible(false);
+                    const newUser = {
+                        ...route.params.newUser,
+                        lastName,
+                        firstName,
+                        username,
+                        birthday
+                    }
+                    navigation.navigate('Troisième étape', {newUser});
+                }
+            } catch (e) {
+                console.log(e);
+            }
         }
+        setLoading(false);
     };
 
     return (
@@ -82,7 +105,7 @@ export default function SignUpSecondStep({navigation}) {
                     margin={20}
                     isNumeric={true}
                 />
-                <DefaultButton title="Suivant" onPress={handleSubmit}/>
+                {loading ? <ActivityIndicator color='#f26619' style={styles.activityIndicator}/> : <DefaultButton title="Suivant" onPress={handleSubmit}/>}
             </ScrollView>
             {snackBarVisible && <Snackbar message={errorMessage} style={styles.snackBar}/>}
         </SafeAreaView>
@@ -113,5 +136,8 @@ const styles = StyleSheet.create({
     snackBar: {
         backgroundColor: 'red',
         marginHorizontal: 10
+    },
+    activityIndicator: {
+        marginVertical: 40
     }
 });
