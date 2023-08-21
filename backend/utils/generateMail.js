@@ -1,7 +1,11 @@
+require("dotenv").config();
 const nodemailer = require('nodemailer');
 const User = require('../models/UserModel');
 const { generateConfirmationEmailCode, generateNewPassword } = require('./generateCredentials');
 const bcrypt = require('bcrypt');
+
+const EMAIL_MOTIV = process.env.EMAIL_MOTIV;
+const EMAIL_MOTIV_PASSWORD = process.env.EMAIL_MOTIVPASSWORD;
 
 // Send a email with a 4 digits code for confirm user's email
 module.exports.sendConfirmationMail = async (subject, user) => {
@@ -15,14 +19,14 @@ module.exports.sendConfirmationMail = async (subject, user) => {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_MOTIV,
-      pass: process.env.EMAIL_MOTIVPASSWORD,
+      user: EMAIL_MOTIV,
+      pass: EMAIL_MOTIV_PASSWORD,
     },
   });
   let mailOptions = {};
   if (subject === 'creation') {
     mailOptions = {
-      from: "remi.marcais87@gmail.com",
+      from: `Motiv <${EMAIL_MOTIV}>`,
       to: user.email,
       subject: "Bienvenue sur Motiv",
       html: `Salut ${user.username} !
@@ -30,7 +34,7 @@ module.exports.sendConfirmationMail = async (subject, user) => {
     };
   } else if (subject === 'resend') {
     mailOptions = {
-      from: "remi.marcais87@gmail.com",
+      from: `Motiv <${EMAIL_MOTIV}>`,
       to: user.email,
       subject: "Renvoi du code de confirmation",
       html: `Alors ${user.username}, tu n'as pas renté le code à temps ?
@@ -45,7 +49,7 @@ module.exports.sendConfirmationMail = async (subject, user) => {
       {new: true}
     )
     mailOptions = {
-      from: "remi.marcais87@gmail.com",
+      from: `Motiv <${EMAIL_MOTIV}>`,
       to: user.email,
       subject: "Réinitialisation du mot de passe",
       html: `On a oublié son mot de passe ${user.username} ?

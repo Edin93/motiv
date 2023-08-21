@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Snackbar } from '@react-native-material/core';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
-import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, Image, Text, ActivityIndicator } from 'react-native';
 
 const MAINTITLE = "Bienvenue sur Motiv !";
 const SUBTITLE = "Crée ton comtpe";
@@ -14,8 +14,10 @@ export default function SignUpFirstStep({navigation}) {
     const [confirmPassword, onChangeConfirmPassword] = useState('');
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
+        setLoading(true);
         if (!email || !password || !confirmPassword) {
             setSnackBarVisible(true);
             setErrorMessage('Tous les champs doivent être remplis');
@@ -27,20 +29,25 @@ export default function SignUpFirstStep({navigation}) {
             setErrorMessage('Les deux mots de passe sont différents');
         } else {
             try {
-                const config = {
-                    headers: {
-                        'content-type': 'Application/json',
-                        Accept: '*/*',
+                const response = await axios.post('http://192.168.1.17:3000/api/users/check-email-password', {email: email, password: password});
+                const error = response.data.errors.message;
+
+                if (error) {
+                    setSnackBarVisible(true);
+                    setErrorMessage(error);
+                } else {
+                    setSnackBarVisible(false);
+                    const newUser = {
+                        email,
+                        password
                     }
+                    navigation.navigate('Seconde étape', { newUser });
                 }
-                const response = await axios.post('https://localhost:3000/api/users/check-email-password', {email: email, password: password}, config);
-                //console.log(response.data);
-                setSnackBarVisible(false);
-                navigation.navigate('Seconde étape');
             } catch (e) {
                 console.log(e);
             }
-        }    
+        }
+        setLoading(false);
     };
 
     return (
@@ -76,7 +83,7 @@ export default function SignUpFirstStep({navigation}) {
                     onChangeText={onChangeConfirmPassword}
                     margin={20}
                 />
-                <DefaultButton title="Suivant" onPress={handleSubmit}/>
+                {loading ? <ActivityIndicator color='#f26619' style={styles.activityIndicator}/> : <DefaultButton title="Suivant" onPress={handleSubmit}/>}
             </ScrollView>
             {snackBarVisible && <Snackbar message={errorMessage} style={styles.snackBar}/>}
         </SafeAreaView>
@@ -107,5 +114,8 @@ const styles = StyleSheet.create({
     snackBar: {
         backgroundColor: 'red',
         marginHorizontal: 10
+    },
+    activityIndicator: {
+        marginVertical: 40
     }
 });

@@ -23,7 +23,7 @@ const activities = [
     {icon: 'dance-ballroom', iconColor: '#6a0ac9', activity: 'Danse'},
 ];
 
-export default function SignUpActivities({navigation}) {
+export default function SignUpActivities({route, navigation}) {
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 

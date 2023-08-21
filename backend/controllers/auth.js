@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require('../models/UserModel');
 const bcrypt = require('bcrypt');
 const { signUpErrors, signInErrors } = require('../utils/error');
@@ -117,9 +118,9 @@ module.exports.resetPassword = async (req, res) => {
 module.exports.checkEmailPassword = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  const errors = { email: '', password: ''};
+  const errors = { message: ''};
   if (user)
-    errors.email = 'Email déjà utilisé';
+    errors.message = 'Email déjà utilisé';
   else {
     if (password.length < 6 ||
       !/[a-z]/.test(password) ||
@@ -127,30 +128,22 @@ module.exports.checkEmailPassword = async (req, res) => {
       !/\d/.test(password) ||
       !/[^a-zA-Z0-9]/.test(password))
     {
-      errors.password = "Le mot de passe doit contenir entre 6 et 20 caractères " +
+      errors.message = "Le mot de passe doit contenir entre 6 et 20 caractères " +
       "comprenant au minimum une lettre minuscule, une lettre majuscule, un chiffre et un symbole";
     }
   }
-  if (errors.email || errors.password)
-    res.status(200).json({ errors });
-  else
-    res.status(200).json("Etape suivante");
+  res.status(200).json({ errors });
 };
 
 // Check if username already exists
 module.exports.checkUsername = async (req, res) => {
   const { username } = req.body;
   const user = await User.findOne({ username });
-  console.log(user);
+  const errors = { message: ''};
+
   if (user)
-    res.status(200).json('Pseudo déjà pris');
-  else {
-    if (username.length < 4 || username.length > 20) {
-      const errors = {username: 'Le pseudo doit contenir entre 4 et 20 caractères'};
-      res.status(200).json({ errors });
-    } else
-      res.status(200).json('Etape suivante');
-  }
+    errors.message = 'Nom d\'utilisateur déjà utilisé';
+  res.status(200).json({ errors });
 };
 
 // Log out function
