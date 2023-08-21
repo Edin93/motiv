@@ -3,19 +3,31 @@ version: "3.9"  # Use the Docker compose version 3.9
 services:
   # Service for the Node.js Express application
   backend-motiv-app:
-    build: ./backend  # Directory containing the backend Dockerfile
+    # build: ./backend  # Directory containing the backend Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
     ports:
       - "3000:3000"    # Map port 3000 from the host to port 3000 in the container
+    volumes:
+      - .:/app
+    working_dir: /usr/src/app/backend
     networks:
       - motiv-app
 
   # Service for the React Native Expo application
   frontend-motiv-app:
-    build: ./frontend # Directory containing the frontend Dockerfile
+    # build: ./frontend # Directory containing the frontend Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
     ports:
       - "19000:19000"  # Map port 19000 from the host to port 19000 in the container
       - "19001:19001"  # Map port 19001 from the host to port 19001 in the container
       - "19006:19006"  # Map port 19006 from the host to port 19006 in the container
+    volumes:
+      - .:/app
+    working_dir: /usr/src/app/backend
     networks:
       - motiv-app
 
