@@ -11,6 +11,7 @@ router.post("/forgot-password", auth.sendResetPassword);
 router.post("/reset-password/:id", auth.resetPassword);
 router.post("/check-email-password", auth.checkEmailPassword);
 router.post("/check-username", auth.checkUsername);
+router.patch("/change-email", auth.changeEmail);
 
 router.get("/logout", auth.logout);
 
