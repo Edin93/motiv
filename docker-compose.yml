@@ -25,6 +25,7 @@ services:
         - NODE_ENV=development
     environment:
       - NODE_ENV=development
+      - ANDROID_HOME=/root/Android/sdk
     stdin_open: true
     tty: true
     ports:
@@ -36,6 +37,7 @@ services:
       - ./frontend:/opt/frontend/app:delegated
       - ./frontend/package.json:/opt/frontend/package.json
       - ./frontend/package-lock.json:/opt/frontend/package-lock.json
+      - $HOME/Android/Sdk:/root/Android/sdk
     working_dir: /usr/src/app/frontend
     networks:
       - motiv-app
