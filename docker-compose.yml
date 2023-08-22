@@ -21,13 +21,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+      args:
+        - NODE_ENV=development
+    environment:
+      - NODE_ENV=development
+    stdin_open: true
+    tty: true
     ports:
       - "19000:19000"  # Map port 19000 from the host to port 19000 in the container
       - "19001:19001"  # Map port 19001 from the host to port 19001 in the container
+      - "19002:19002"  # Map port 19002 from the host to port 19002 in the container
       - "19006:19006"  # Map port 19006 from the host to port 19006 in the container
     volumes:
-      - .:/app
-    working_dir: /usr/src/app/backend
+      - ./frontend:/opt/frontend/app:delegated
+      - ./frontend/package.json:/opt/frontend/package.json
+      - ./frontend/package-lock.json:/opt/frontend/package-lock.json
+    working_dir: /usr/src/app/frontend
     networks:
       - motiv-app
     depends_on:
