@@ -10,13 +10,17 @@ export default function DefaultInput(props) {
         text,
         onChangeText,
         margin,
-        isNumeric
+        isNumeric,
+        onFocus
     } = props;
 
     const [customBorderWidth, setBorderWidth] = useState(0);
     const [showPassword, setShowPassword] = useState(false);
 
-    const customOnFocus = () => {setBorderWidth(2);};
+    const customOnFocus = () => {
+        setBorderWidth(2);
+        onFocus();
+    };
     const customOnBlur = () => {setBorderWidth(0);};
 
     const formatText = (text) => {

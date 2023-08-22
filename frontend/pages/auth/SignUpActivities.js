@@ -1,33 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Snackbar } from '@react-native-material/core';
 import Activity from '../../components/general/Activity';
 import DefaultButton from '../../components/general/DefaultButton';
-import { StyleSheet, SafeAreaView, ScrollView, View, Image, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, View, Image, Text, ActivityIndicator } from 'react-native';
 
 const MAIN_TITLE = "Tu y es presque...";
 const SUBTITLE = "Choisis tes activités";
 
-const activities = [
-    {icon: 'basketball', iconColor: '#f26619', activity: 'Basket'},
-    {icon: 'volleyball', iconColor: '#e8e4d8', activity: 'Volley'},
-    {icon: 'soccer', iconColor: '#000000', activity: 'Football'},
-    {icon: 'bike-fast', iconColor: '#1f5980', activity: 'Cyclisme'},
-    {icon: 'walk', iconColor: '#4486b3', activity: 'Randonnée'},
-    {icon: 'table-tennis', iconColor: '#cc3b1b', activity: 'Ping-pong'},
-    {icon: 'tennis', iconColor: '#fcba03', activity: 'Tennis'},
-    {icon: 'tennis-ball', iconColor: '#5d6361', activity: 'Pétanque'},
-    {icon: 'cards-playing-outline', iconColor: '#c90a0a', activity: 'Bridge'},
-    {icon: 'badminton', iconColor: '#e0d2ce', activity: 'Badminton'},
-    {icon: 'run-fast', iconColor: '#3ebd8e', activity: 'Running'},
-    {icon: 'dumbbell', iconColor: '#000000', activity: 'Fitness'},
-    {icon: 'dance-ballroom', iconColor: '#6a0ac9', activity: 'Danse'},
-];
-
 export default function SignUpActivities({route, navigation}) {
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [allActivities, setAllActivities] = useState([]);
+    const [selectedActivities, setelectedActivities] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const selectedActivities = [];
+    useEffect(() => {
+        setLoading(true);
+        axios.get('http://192.168.1.17:3000/api/activities/')
+        .then((res) => {
+            setAllActivities(res.data);
+            setLoading(false);
+        });
+    }, []);
 
     const handleSubmit = () => {
         if (selectedActivities.length < 1) {
@@ -35,7 +30,11 @@ export default function SignUpActivities({route, navigation}) {
             setErrorMessage('Vous devez selectionner au moins une activité');
         } else {
             setSnackBarVisible(false);
-            navigation.navigate('Dernière étape');
+            const newUser = {
+                ...route.params.newUser,
+                activities: selectedActivities
+            }
+            navigation.navigate('Dernière étape', {newUser});
         }
     };
 
@@ -48,54 +47,70 @@ export default function SignUpActivities({route, navigation}) {
                 />
                 <Text style={styles.mainTitle}>{MAIN_TITLE}</Text>
                 <Text style={styles.subTitle}>{SUBTITLE}</Text>
+                {loading ? <ActivityIndicator color='#f26619' style={styles.activityIndicator}/> :
                 <ScrollView horizontal style={styles.activities} showsHorizontalScrollIndicator={false}>
                     <View style={{marginLeft: 20}}>
-                       {activities.slice(0, 3).map((activity) => <Activity
-                                                                    key={activity.activity}
+                       {allActivities.slice(0, 3).map((activity) => <Activity
+                                                                    key={activity._id}
                                                                     icon={activity.icon}
                                                                     iconColor={activity.iconColor}
-                                                                    activity={activity.activity}
-                                                                    select={() => selectedActivities.push(activity)}
-                                                                    unselect={() => selectedActivities.pop(activity)}/>)} 
+                                                                    activity={activity.name}
+                                                                    select={() => {
+                                                                        setelectedActivities([...selectedActivities, activity._id]);
+                                                                        setSnackBarVisible(false);
+                                                                    }}
+                                                                    unselect={() => setelectedActivities(selectedActivities.filter((id) => id != activity._id))}/>)} 
                     </View>
                     <View>
-                       {activities.slice(3, 6).map((activity) => <Activity
-                                                                    key={activity.activity}
+                       {allActivities.slice(3, 6).map((activity) => <Activity
+                                                                    key={activity.name}
                                                                     icon={activity.icon}
                                                                     iconColor={activity.iconColor}
-                                                                    activity={activity.activity}
-                                                                    select={() => selectedActivities.push(activity)}
-                                                                    unselect={() => selectedActivities.pop(activity)}/>)} 
+                                                                    activity={activity.name}
+                                                                    select={() => {
+                                                                        setelectedActivities([...selectedActivities, activity._id]);
+                                                                        setSnackBarVisible(false);
+                                                                    }}
+                                                                    unselect={() => setelectedActivities(selectedActivities.filter((id) => id != activity._id))}/>)} 
                     </View>
                     <View>
-                       {activities.slice(6, 9).map((activity) => <Activity
-                                                                    key={activity.activity}
+                       {allActivities.slice(6, 9).map((activity) => <Activity
+                                                                    key={activity._id}
                                                                     icon={activity.icon}
                                                                     iconColor={activity.iconColor}
-                                                                    activity={activity.activity}
-                                                                    select={() => selectedActivities.push(activity)}
-                                                                    unselect={() => selectedActivities.pop(activity)}/>)} 
+                                                                    activity={activity.name}
+                                                                    select={() => {
+                                                                        setelectedActivities([...selectedActivities, activity._id]);
+                                                                        setSnackBarVisible(false);
+                                                                    }}
+                                                                    unselect={() => setelectedActivities(selectedActivities.filter((id) => id != activity._id))}/>)} 
                     </View>
                     <View>
-                       {activities.slice(9, 12).map((activity) => <Activity
-                                                                    key={activity.activity}
+                       {allActivities.slice(9, 12).map((activity) => <Activity
+                                                                    key={activity._id}
                                                                     icon={activity.icon}
                                                                     iconColor={activity.iconColor}
-                                                                    activity={activity.activity}
-                                                                    select={() => selectedActivities.push(activity)}
-                                                                    unselect={() => selectedActivities.pop(activity)}/>)} 
+                                                                    activity={activity.name}
+                                                                    select={() => {
+                                                                        setelectedActivities([...selectedActivities, activity._id]);
+                                                                        setSnackBarVisible(false);
+                                                                    }}
+                                                                    unselect={() => setelectedActivities(selectedActivities.filter((id) => id != activity._id))}/>)} 
                     </View>
                     <View style={{marginRight: 20}}>
-                       {activities.slice(12,).map((activity) => <Activity
-                                                                    key={activity.activity}
+                       {allActivities.slice(12,).map((activity) => <Activity
+                                                                    key={activity._id}
                                                                     icon={activity.icon}
                                                                     iconColor={activity.iconColor}
-                                                                    activity={activity.activity}
-                                                                    select={() => selectedActivities.push(activity)}
-                                                                    unselect={() => selectedActivities.pop(activity)}/>)} 
+                                                                    activity={activity.name}
+                                                                    select={() => {
+                                                                        setelectedActivities([...selectedActivities, activity._id]);
+                                                                        setSnackBarVisible(false);
+                                                                    }}
+                                                                    unselect={() => setelectedActivities(selectedActivities.filter((id) => id != activity._id))}/>)} 
                     </View>
                 </ScrollView>
-                
+                }
                 <DefaultButton title="Suivant" onPress={handleSubmit}/>
             </ScrollView>
             {snackBarVisible && <Snackbar message={errorMessage} style={styles.snackBar}/>}
@@ -131,5 +146,8 @@ const styles = StyleSheet.create({
     snackBar: {
         backgroundColor: 'red',
         marginHorizontal: 10
+    },
+    activityIndicator: {
+        marginVertical: 40
     }
 });

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 import { Snackbar } from '@react-native-material/core';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
@@ -25,6 +25,10 @@ export default function SignUpSecondStep({route, navigation}) {
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const customOnFocus = () => {
+        setSnackBarVisible(false);
+    };
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -79,6 +83,7 @@ export default function SignUpSecondStep({route, navigation}) {
                     text={lastName}
                     onChangeText={onChangeLastName}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 <DefaultInput 
                     customPlaceholder="Prénom"
@@ -87,6 +92,7 @@ export default function SignUpSecondStep({route, navigation}) {
                     text={firstName}
                     onChangeText={onChangeFirstName}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 <DefaultInput 
                     customPlaceholder="Nom d'utilisateur"
@@ -95,6 +101,7 @@ export default function SignUpSecondStep({route, navigation}) {
                     text={username}
                     onChangeText={onChangeUsername}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 <DefaultInput 
                     customPlaceholder="Date de naissance JJ/MM/AAAA"
@@ -104,6 +111,7 @@ export default function SignUpSecondStep({route, navigation}) {
                     onChangeText={onChangeBirthday}
                     margin={20}
                     isNumeric={true}
+                    onFocus={customOnFocus}
                 />
                 {loading ? <ActivityIndicator color='#f26619' style={styles.activityIndicator}/> : <DefaultButton title="Suivant" onPress={handleSubmit}/>}
             </ScrollView>

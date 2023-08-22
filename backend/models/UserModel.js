@@ -101,16 +101,14 @@ userSchema.pre("save", async function(next) {
 userSchema.statics.login = async function(email, password) {
     const user = await this.findOne({email});
     if (user) {
-        if(user.emailConfirm)
-        {
-
-            const auth = await bcrypt.compare(password, user.password);
-            if (auth) {
+        const auth = await bcrypt.compare(password, user.password);
+        if (auth) {
+            if (user.emailConfirm) {
                 return user;
             }
-            throw Error('incorrect password');
+            throw Error('incorrect validation');
         }
-        throw Error('incorrect validation')
+        throw Error('incorrect password');
     }
     throw Error('incorrect email');
 }

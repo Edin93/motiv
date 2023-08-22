@@ -5,11 +5,10 @@ import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text, ActivityIndicator } from 'react-native';
 
-const MAINTITLE = "Bienvenue sur Motiv !";
-const SUBTITLE = "Crée ton comtpe";
+const MAINTITLE = "Confirme ton adresse email";
+const SUBTITLE = "Entre le code à 4 chiffres reçu à l'adresse ";
 
-export default function SignUpFirstStep({navigation}) {
-    const [email, onChangeEmail] = useState('');
+export default function ConfirmEmail({route, navigation}) {
     const [password, onChangePassword] = useState('');
     const [confirmPassword, onChangeConfirmPassword] = useState('');
     const [snackBarVisible, setSnackBarVisible] = useState(false);
@@ -62,16 +61,7 @@ export default function SignUpFirstStep({navigation}) {
                     style={styles.imageStyle}
                 />
                 <Text style={styles.mainTitle}>{MAINTITLE}</Text>
-                <Text style={styles.subTitle}>{SUBTITLE}</Text>
-                <DefaultInput 
-                    customPlaceholder="Email"
-                    isPassword={false}
-                    icon="mail"
-                    text={email}
-                    onChangeText={onChangeEmail}
-                    margin={20}
-                    onFocus={customOnFocus}
-                />
+                <Text style={styles.subTitle}>{SUBTITLE + route.params.email}</Text>
                 <DefaultInput 
                     customPlaceholder="Mot de passe"
                     isPassword={true}
@@ -81,15 +71,7 @@ export default function SignUpFirstStep({navigation}) {
                     margin={20}
                     onFocus={customOnFocus}
                 />
-                <DefaultInput 
-                    customPlaceholder="Confirmer le mot de passe"
-                    isPassword={true}
-                    icon="check"
-                    text={confirmPassword}
-                    onChangeText={onChangeConfirmPassword}
-                    margin={20}
-                    onFocus={customOnFocus}
-                />
+                <Text style={styles.subTitle}>Entrer un nouveau mail</Text>
                 {loading ? <ActivityIndicator color='#f26619' style={styles.activityIndicator}/> : <DefaultButton title="Suivant" onPress={handleSubmit}/>}
             </ScrollView>
             {snackBarVisible && <Snackbar message={errorMessage} style={styles.snackBar}/>}
@@ -107,7 +89,8 @@ const styles = StyleSheet.create({
         
     },
     subTitle: {
-        margin: 10,
+        marginVertical: 10,
+        marginHorizontal: 40,
         textAlign: 'center',
         fontSize: 16,
         fontWeight: 'bold',

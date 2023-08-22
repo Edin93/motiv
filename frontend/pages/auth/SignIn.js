@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Snackbar } from '@react-native-material/core';
 import DefaultInput from '../../components/general/DefaultInput';
@@ -23,8 +24,22 @@ export default function SignIn({navigation}) {
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const checkCredentials = () => {
+    const customOnFocus = () => {
+        setSnackBarVisible(false);
+    };
+
+    const checkCredentials = async () => {
         setLoading(true);
+        const response = await axios.post('http://192.168.1.17:3000/api/users/login', {email, password});
+        if ('user' in response.data) {
+            console.log('L\'utilisateur est bien connecté !');
+        } else if ('errors' in response.data && response.data.errors.message == 'Veuillez confirmer votre adresse email') {
+            navigation.navigate('Confirmation email', {email});
+        } else {
+            setSnackBarVisible(true);
+            setErrorMessage(response.data.errors.message);
+        }
+        setLoading(false);
     };
 
     return (
@@ -43,6 +58,7 @@ export default function SignIn({navigation}) {
                     text={email}
                     onChangeText={onChangeEmail}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 <DefaultInput 
                     customPlaceholder="Mot de passe"
@@ -51,11 +67,12 @@ export default function SignIn({navigation}) {
                     text={password}
                     onChangeText={onChangePassword}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 <Pressable onPressIn={() => navigation.navigate('Mot de passe oublié')}>
                     <Text style={styles.subTitle}>Mot de passe oublié</Text>
                 </Pressable>
-                {loading ? <ActivityIndicator color='#f26619'/> : <DefaultButton title="S'identifier" onPress={checkCredentials}/>}
+                {loading ? <ActivityIndicator style={styles.activityIndicator} color='#f26619'/> : <DefaultButton title="S'identifier" onPress={checkCredentials}/>}
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{flex: 1, height: 1, backgroundColor: 'black', marginLeft: 50}} />
                 <View>
@@ -66,7 +83,7 @@ export default function SignIn({navigation}) {
                 <Text style={styles.subTitle}>Tu n'as pas de compte ?</Text>
                 <DefaultButton title="Créer un compte" onPress={() => navigation.navigate('Première étape')}/>
             </ScrollView>
-            {snackBarVisible && <Snackbar message='hello' style={styles.snackBar}/>}
+            {snackBarVisible && <Snackbar message={errorMessage} style={styles.snackBar}/>}
         </SafeAreaView> 
     );
 }
@@ -93,5 +110,12 @@ const styles = StyleSheet.create({
     },
     snackBar: {
         backgroundColor: 'red',
+    },
+    snackBar: {
+        backgroundColor: 'red',
+        marginHorizontal: 10
+    },
+    activityIndicator: {
+        marginVertical: 30
     }
 });

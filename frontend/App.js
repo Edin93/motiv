@@ -4,6 +4,7 @@ import SignUpSecondStep from './pages/auth/SignUpSecondStep';
 import SignUpActivities from './pages/auth/SignUpActivities';
 import SignUpLocation from './pages/auth/SinUpLocation';
 import ForgotPassword from './pages/auth/ForgotPassword';
+import ConfirmEmail from './pages/auth/ConfirmEmail';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -32,6 +33,11 @@ export default function App() {
         <Stack.Screen
           name="Identification"
           component={SignIn}
+          options={options}
+        />
+        <Stack.Screen
+          name='Confirmation email'
+          component={ConfirmEmail}
           options={options}
         />
         <Stack.Screen
