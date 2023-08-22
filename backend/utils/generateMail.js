@@ -4,6 +4,7 @@ const User = require('../models/UserModel');
 const { generateConfirmationEmailCode, generateNewPassword } = require('./generateCredentials');
 const bcrypt = require('bcrypt');
 
+const EMAIL_SERVICE = process.env.EMAIL_SERVICE;
 const EMAIL_MOTIV = process.env.EMAIL_MOTIV;
 const EMAIL_MOTIV_PASSWORD = process.env.EMAIL_MOTIVPASSWORD;
 
@@ -11,13 +12,13 @@ const EMAIL_MOTIV_PASSWORD = process.env.EMAIL_MOTIVPASSWORD;
 module.exports.sendConfirmationMail = async (subject, user) => {
   const email = user.email;
   let tmp_code, tmp_code_expiration;
-  if (subject == 'creation' || subject == 'resend') {
+  if (subject != 'password') {
     tmp_code = generateConfirmationEmailCode();
     tmp_code_expiration = new Date(Date.now() + 5 * 60 * 1000);
     await User.findOneAndUpdate({ email }, { tmp_code, tmp_code_expiration}, { new: true });
   }
   var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: EMAIL_SERVICE,
     auth: {
       user: EMAIL_MOTIV,
       pass: EMAIL_MOTIV_PASSWORD,

@@ -146,6 +146,16 @@ module.exports.checkUsername = async (req, res) => {
   res.status(200).json({ errors });
 };
 
+// Change email
+module.exports.changeEmail = async (req, res) => {
+  const { email, newEmail } = req.body;
+  User.findOneAndUpdate({email: email}, {email: newEmail}, {new: true})
+    .then((user) => {
+      sendConfirmationMail(subject = 'creation', user);
+      res.status(200).json(user);
+    });
+}
+
 // Log out function
 module.exports.logout = (req, res) => {
   res.redirect('/');
