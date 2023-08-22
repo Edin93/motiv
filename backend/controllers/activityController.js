@@ -1,3 +1,4 @@
+const User = require('../models/UserModel');
 const Activity = require('../models/activityModel');
 const { createActivityErrors } = require('../utils/error');
 
@@ -39,3 +40,16 @@ module.exports.deleteActivity = (req, res) => {
     .then(() => res.status(200).json({ message: 'Activity deleted !' }))
     .catch(error => res.status(200).json({ error }));
 };
+
+// Count the number of users for all activity
+module.exports.countUsersActivities = (req, res) => {
+  Activity.find()
+    .then((activities) => {
+      let activitiesList = [];
+      for (let i in activities) {
+          activitiesList.push({name: activities[i].name, id: activities[i]._id, count: 0});
+        }
+      res.status(200).json({activitiesList});
+    })
+    .catch(error => res.status(200).json({ error }));
+}
