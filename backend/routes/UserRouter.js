@@ -1,6 +1,9 @@
 const auth = require('../controllers/auth');
 const userController = require('../controllers/UserController');
 const router = require('express').Router();
+const multer = require('multer');
+
+const upload = multer();
 
 // Authentification route
 router.post("/register", auth.signUp);
@@ -22,5 +25,6 @@ router.put("/:id", userController.updateUser);
 router.delete("/:id", userController.deleteUser);
 router.patch("/recommend/:id", userController.recommend);
 router.patch("/delete-recommendation/:id", userController.deleteRecommendation);
+router.post("/upload", upload.single('upload'), userController.uploadImage);
 
 module.exports = router;

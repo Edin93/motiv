@@ -1,6 +1,7 @@
 // User function
 const User = require('../models/UserModel');
 const ObjectId = require('mongoose').Types.ObjectId;
+const sharp = require('sharp');
 
 // Get all users without the password
 module.exports.getAllUsers = (req, res) => {
@@ -55,3 +56,20 @@ module.exports.deleteRecommendation = (req, res) => {
   User.findByIdAndUpdate(req.body.idToDelete, { $pull: { recommandations: req.params.id } })
     .catch(error => res.status(200).json({ error }));
 };
+
+
+// Upload profile image
+module.exports.uploadImage = async (req, res) => {
+  const { userId } = req.body;
+  const filename = `${userId}.png`
+  const dirImage = `${__dirname}/../../frontend/uploads/${filename}`;
+  try {
+    await sharp(req.file.buffer).resize({width: 250, height: 250}).png().toFile(dirImage);
+    User.findOneAndUpdate({_id: userId}, {picture: `./uploads/${filename}`}, {new: true})
+      .then((user) => res.status(200).json(user))
+      .catch((err) => res.status(200).json({ err }));
+  } catch (err) {
+    console.log(err);
+    res.status(200).json({ err });
+  }
+}
