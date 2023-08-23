@@ -47,28 +47,28 @@ module.exports.sendConfirmationCode = async (req, res) => {
 module.exports.confirmEmail = async (req, res) => {
   const { tmp_code } = req.body;
   const user = await User.findOne({ _id: req.params.id});
+  const errors = {message: ''}
   if (user) {
     try {
       const currentTime = new Date();
       if (currentTime > user.tmp_code_expiration) {
-        res.status(200).json('Code de confirmation expiré');
+        errors.message = 'Code de confirmation expiré';
       } else if (user.tmp_code != tmp_code) {
-        res.status(200).json('Code de confirmation incorrect')
+        errors.message = 'Code de confirmation incorrect';
       } else {
         await User.updateOne(
           { _id: req.params.id },
           { emailConfirm: true, tmp_code: null, tmp_code_expiration: null },
           { new: true }
         );
-        res.status(200).json('Email confirmé');
       }
     } catch (error) {
       res.status(200).json({ error });
     }
   } else {
-    res.status(200).json({ errors: "Email inconnu" });
+    errors.message = 'Email inconnu';
   }
-  
+  res.status(200).json({errors});
 }
 
 // Send an email with a new password generated randomly and

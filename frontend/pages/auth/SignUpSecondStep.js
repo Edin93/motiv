@@ -30,6 +30,20 @@ export default function SignUpSecondStep({route, navigation}) {
         setSnackBarVisible(false);
     };
 
+    const formatText = (text) => {
+        if (!text) {
+          return '';
+        }
+    
+        const cleanedText = text.replace(/[^\d]/g, '');
+        const day = cleanedText.slice(0, 2);
+        const month = cleanedText.slice(2, 4);
+        const year = cleanedText.slice(4, 8);
+    
+        return `${day}${day && month ? '/' : ''}${month}${month && year ? '/' : ''}${year}`;
+    };
+
+
     const handleSubmit = async () => {
         setLoading(true);
         if (!lastName || !firstName || !username || !birthday) {
@@ -43,7 +57,7 @@ export default function SignUpSecondStep({route, navigation}) {
             setErrorMessage('Vous devez avoir plus de 15 ans pour continuer');
         } else {
             try {
-                const response = await axios.post('http://128.53.5.198:3000/api/users/check-username', {username});
+                const response = await axios.post('http://192.168.1.17:3000/api/users/check-username', {username});
                 const error = response.data.errors.message;
 
                 if (error) {
@@ -107,7 +121,7 @@ export default function SignUpSecondStep({route, navigation}) {
                     customPlaceholder="Date de naissance JJ/MM/AAAA"
                     isPassword={false}
                     icon="calendar"
-                    text={birthday}
+                    text={formatText(birthday)}
                     onChangeText={onChangeBirthday}
                     margin={20}
                     isNumeric={true}

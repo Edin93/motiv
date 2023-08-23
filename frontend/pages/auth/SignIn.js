@@ -34,7 +34,7 @@ export default function SignIn({navigation}) {
         if ('user' in response.data) {
             if (!response.data.user.emailConfirm) {
                 setSnackBarVisible(false);
-                navigation.navigate('Confirmation email', {user: response.data.user});
+                navigation.navigate('Confirmation email', {userId: response.data.user._id, email});
             } else {
                 console.log('L\'utilisateur est bien connecté !');  
             }

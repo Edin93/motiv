@@ -36,8 +36,8 @@ export default function SignUpLocation({route, navigation}) {
                 region: {...state},
                 city: {...city}
             };
-            const response = await axios.post('http://128.53.5.198:3000/api/users/register', newUser);
-            navigation.navigate('Confirmation email', {success: true, message: 'Votre compte a été créé avec succès !', user: response.data});
+            const response = await axios.post('http://192.168.1.17:3000/api/users/register', newUser);
+            navigation.navigate('Confirmation email', {success: true, message: 'Votre compte a été créé avec succès !', userId: response.data.user, email: newUser.email});
         } catch (e) {
             console.log(e);
         }

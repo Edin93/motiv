@@ -7,10 +7,11 @@ import { StyleSheet, SafeAreaView, ScrollView, Image, Text, ActivityIndicator, V
 
 const MAINTITLE = "Confirme ton adresse email";
 const SUBTITLE = "Entre le code à 4 chiffres reçu à l'adresse ";
-const IP_ADDRESS="128.53.5.198";
+const IP_ADDRESS="192.168.1.17";
 
 export default function ConfirmEmail({route, navigation}) {
-    const {_id, email} = route.params.user;
+    const userId = route.params.userId;
+    const email = route.params.email;
 
     const [code, onChangeCode] = useState('');
     const [userEmail, setUserEmail] = useState(email);
@@ -27,16 +28,19 @@ export default function ConfirmEmail({route, navigation}) {
     };
 
     const sendNewCode = async () => {
+        setLoading(true);
         try {
-            await axios.get(`http://${IP_ADDRESS}:3000/api/users/send-email-lost/${_id}`);
+            await axios.get(`http://${IP_ADDRESS}:3000/api/users/send-email-lost/${userId}`);
             setSuccessSnackBarVisible(true);
             setSnackBarMessage('Un nouveau code à été envoyé');
         } catch (e) {
             console.log(e);
         }
+        setLoading(false);
     };
 
     const sendCodeNewAddress = async () => {
+        setLoading(true);
         try {
             await axios.patch(`http://${IP_ADDRESS}:3000/api/users/change-email`, {email: userEmail, newEmail: newMail});
             setUserEmail(newMail);
@@ -45,17 +49,26 @@ export default function ConfirmEmail({route, navigation}) {
         } catch (e) {
             console.log(e);
         }
+        setLoading(false);
     };
 
     const handleSubmit = async () => {
+        setLoading(true);
         try {
-            await axios.post(`http://${IP_ADDRESS}:3000/api/users/confirm-email/${_id}`, {tmp_code: Number(code)});
-            setSuccessSnackBarVisible(true);
-            setSnackBarMessage(`Tout est bon !`);
-            console.log('Tout est bon !');
+            const response = await axios.post(`http://${IP_ADDRESS}:3000/api/users/confirm-email/${userId}`, {tmp_code: Number(code)});
+            const message = response.data.errors.message;
+            if (message) {
+                setSnackBarVisible(true);
+                setSnackBarMessage(message);
+            } else {
+                setSnackBarVisible(false);
+                setSuccessSnackBarVisible(true);
+                setSnackBarMessage(`Tout est bon !`); 
+            }
         } catch (e) {
             console.log(e);
         }
+        setLoading(false);
     };
 
     return (
