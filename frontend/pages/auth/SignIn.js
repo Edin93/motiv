@@ -32,10 +32,13 @@ export default function SignIn({navigation}) {
         setLoading(true);
         const response = await axios.post('http://192.168.1.17:3000/api/users/login', {email, password});
         if ('user' in response.data) {
-            console.log('L\'utilisateur est bien connecté !');
-        } else if ('errors' in response.data && response.data.errors.message == 'Veuillez confirmer votre adresse email') {
-            navigation.navigate('Confirmation email', {email});
-        } else {
+            if (!response.data.user.emailConfirm) {
+                setSnackBarVisible(false);
+                navigation.navigate('Confirmation email', {user: response.data.user});
+            } else {
+                console.log('L\'utilisateur est bien connecté !');  
+            }
+        } else if ('errors' in response.data) {
             setSnackBarVisible(true);
             setErrorMessage(response.data.errors.message);
         }

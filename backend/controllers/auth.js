@@ -21,7 +21,7 @@ module.exports.signIn = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.login(email, password);
-    res.status(200).json({ user: user._id });
+    res.status(200).json({ user: user });
   } catch (error) {
     let errors = signInErrors(error);
     res.status(200).json({errors});
