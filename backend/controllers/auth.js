@@ -7,6 +7,14 @@ const { sendConfirmationMail } = require('../utils/generateMail');
 // Sign Up and send a email confirmation
 module.exports.signUp = async (req, res) => {
   try {
+    if (password.length < 12 ||
+      !/[a-z]/.test(password) ||
+      !/[A-Z]/.test(password) ||
+      !/\d/.test(password) ||
+      !/[^a-zA-Z0-9]/.test(password))
+    {
+      throw Error("password");
+    }
     const user = await User.create({ ...req.body });
     sendConfirmationMail(subject = 'creation', user);
     res.status(201).json({ user: user._id });
@@ -94,7 +102,15 @@ module.exports.resetPassword = async (req, res) => {
   const user = await User.findOne({ _id: req.params.id });
   if (user) {
     try {
-        if (password == confirmPassword) {
+        if (password.length < 12 ||
+          !/[a-z]/.test(password) ||
+          !/[A-Z]/.test(password) ||
+          !/\d/.test(password) ||
+          !/[^a-zA-Z0-9]/.test(password))
+        {
+          res.status(200).json({errors: "Le mot de passe doit contenir entre 12 et 20 caractères " +
+          "comprenant au minimum une lettre minuscule, une lettre majuscule, un chiffre et un symbole"});
+        } else if (password == confirmPassword) {
           const newPassword = await bcrypt.hash(password, 10);
           await User.updateOne(
             { _id: req.params.id },
@@ -104,7 +120,7 @@ module.exports.resetPassword = async (req, res) => {
             res.status(200).json('Réinitialisation du mot passe réussie');
         }
         else {
-          res.status(200).json({errors: "Les deux mots de passe ne correspondent pas"})
+          res.status(200).json({errors: "Les deux mots de passe ne correspondent pas"});
         }
     } catch (error) {
       res.status(200).json({ error });
@@ -122,13 +138,13 @@ module.exports.checkEmailPassword = async (req, res) => {
   if (user)
     errors.message = 'Email déjà utilisé';
   else {
-    if (password.length < 6 ||
+    if (password.length < 12 ||
       !/[a-z]/.test(password) ||
       !/[A-Z]/.test(password) ||
       !/\d/.test(password) ||
       !/[^a-zA-Z0-9]/.test(password))
     {
-      errors.message = "Le mot de passe doit contenir entre 6 et 20 caractères " +
+      errors.message = "Le mot de passe doit contenir entre 12 et 20 caractères " +
       "comprenant au minimum une lettre minuscule, une lettre majuscule, un chiffre et un symbole";
     }
   }
