@@ -10,7 +10,7 @@ module.exports.signUpErrors = (err) => {
   }
 
   if (err.message.includes('password')) {
-    errors.password = "Le mot de passe doit contenir entre 6 et 20 caractères " +
+    errors.password = "Le mot de passe doit contenir entre 12 et 20 caractères " +
     "comprenant au minimum une lettre minuscule, une lettre majuscule, un chiffre et un symbole";
   }
 
