@@ -48,7 +48,7 @@ export default function SignUpFirstStep({navigation}) {
                     navigation.navigate('Seconde étape', { newUser });
                 }
             } catch (e) {
-                console.log(e);
+                console.log('Sin up first step page' + e);
             }
         }
         setLoading(false);

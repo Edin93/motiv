@@ -44,6 +44,7 @@ export default function ConfirmEmail({route, navigation}) {
         try {
             await axios.patch(`http://${IP_ADDRESS}:3000/api/users/change-email`, {email: userEmail, newEmail: newMail});
             setUserEmail(newMail);
+            setSnackBarVisible(false);
             setSuccessSnackBarVisible(true);
             setSnackBarMessage(`Un code à été envoyé à l'adresse ${newMail}`);
         } catch (e) {
@@ -58,6 +59,7 @@ export default function ConfirmEmail({route, navigation}) {
             const response = await axios.post(`http://${IP_ADDRESS}:3000/api/users/confirm-email/${userId}`, {tmp_code: Number(code)});
             const message = response.data.errors.message;
             if (message) {
+                setSuccessSnackBarVisible(false);
                 setSnackBarVisible(true);
                 setSnackBarMessage(message);
             } else {
@@ -66,7 +68,7 @@ export default function ConfirmEmail({route, navigation}) {
                 setSnackBarMessage(`Tout est bon !`); 
             }
         } catch (e) {
-            console.log(e);
+            console.log('Confirm email page' + e);
         }
         setLoading(false);
     };

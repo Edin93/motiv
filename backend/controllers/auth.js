@@ -7,14 +7,6 @@ const { sendConfirmationMail } = require('../utils/generateMail');
 // Sign Up and send a email confirmation
 module.exports.signUp = async (req, res) => {
   try {
-    if (password.length < 12 ||
-      !/[a-z]/.test(password) ||
-      !/[A-Z]/.test(password) ||
-      !/\d/.test(password) ||
-      !/[^a-zA-Z0-9]/.test(password))
-    {
-      throw Error("password");
-    }
     const user = await User.create({ ...req.body });
     sendConfirmationMail(subject = 'creation', user);
     res.status(201).json({ user: user._id });

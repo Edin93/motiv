@@ -21,7 +21,8 @@ export default function SignUpActivities({route, navigation}) {
         .then((res) => {
             setAllActivities(res.data);
             setLoading(false);
-        });
+        })
+        .catch((e) => console.log('Select activities page' + e));
     }, []);
 
     const handleSubmit = () => {

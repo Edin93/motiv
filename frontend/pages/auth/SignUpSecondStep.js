@@ -75,7 +75,7 @@ export default function SignUpSecondStep({route, navigation}) {
                     navigation.navigate('Troisième étape', {newUser});
                 }
             } catch (e) {
-                console.log(e);
+                console.log('Sin up second step page' + e);
             }
         }
         setLoading(false);

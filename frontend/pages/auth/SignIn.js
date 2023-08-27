@@ -30,17 +30,21 @@ export default function SignIn({navigation}) {
 
     const checkCredentials = async () => {
         setLoading(true);
-        const response = await axios.post('http://192.168.1.17:3000/api/users/login', {email, password});
-        if ('user' in response.data) {
-            if (!response.data.user.emailConfirm) {
-                setSnackBarVisible(false);
-                navigation.navigate('Confirmation email', {userId: response.data.user._id, email});
-            } else {
-                console.log('L\'utilisateur est bien connecté !');  
+        try {
+            const response = await axios.post('http://192.168.1.17:3000/api/users/login', {email, password});
+            if ('user' in response.data) {
+                if (!response.data.user.emailConfirm) {
+                    setSnackBarVisible(false);
+                    navigation.navigate('Confirmation email', {userId: response.data.user._id, email});
+                } else {
+                    console.log('L\'utilisateur est bien connecté !');  
+                }
+            } else if ('errors' in response.data) {
+                setSnackBarVisible(true);
+                setErrorMessage(response.data.errors.message);
             }
-        } else if ('errors' in response.data) {
-            setSnackBarVisible(true);
-            setErrorMessage(response.data.errors.message);
+        } catch (e) {
+            console.log('Sign in page: ' + e);
         }
         setLoading(false);
     };
@@ -75,7 +79,8 @@ export default function SignIn({navigation}) {
                 <Pressable onPressIn={() => navigation.navigate('Mot de passe oublié')}>
                     <Text style={styles.subTitle}>Mot de passe oublié</Text>
                 </Pressable>
-                {loading ? <ActivityIndicator style={styles.activityIndicator} color='#f26619'/> : <DefaultButton title="S'identifier" onPress={checkCredentials}/>}
+                {loading ? <ActivityIndicator style={styles.activityIndicator} color='#f26619'/> :
+                <DefaultButton title="S'identifier" onPress={checkCredentials}/>}
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{flex: 1, height: 1, backgroundColor: 'black', marginLeft: 50}} />
                 <View>
