@@ -26,6 +26,13 @@
     * VERY IMPORTANT: each time we update the code of the frontend or the backend IMAGES (i.e the Dockerfile files) we need to rerun the `docker-compose` command with the following option `--build` so that the docker-compose can rebuild the docker images and containers with the newly updated code, so the full command is:
         * ```docker-compose up --build```
 
+#### Interact with a running container:
+* After executing the ```docker-compose up --build``` command you might want to interact with the frontend and/or the backend running containers (i.e execute commands on the terminal on each of these). To do so, first you need to know the ID of the running container that you want to interact with, by running this command on another terminal:
+    * ```docker ps -a```
+    * The first column contains the ID of containers(s).
+    * To interact with the container, you have to use the following command:
+        * ```docker attach id-of-container-you-want-to-use```
+
 #### Coding in the Docker environments:
 * First, you need to install VSCode if you haven't yet.
 * look for the "Remote Development" extension on VSCode, created by Microsoft and install it.
