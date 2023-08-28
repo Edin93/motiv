@@ -1,15 +1,16 @@
+import axios from 'axios';
 import { State, City } from 'country-state-city';
 import React, { useState, useEffect } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import DefaultButton from '../../components/general/DefaultButton';
-import { StyleSheet, SafeAreaView, ScrollView, Image, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, Image, Text, ActivityIndicator } from 'react-native';
 
 const MAIN_TITLE = "Dernière étape !";
 const SUBTITLE = "Dans quelle ville te trouves-tu ?";
 
 const blackListedStates = ['CP', 'PF', 'TF', 'PM', 'BL', 'MF', 'WF']
 
-export default function SignUpLocation({navigation}) {
+export default function SignUpLocation({route, navigation}) {
     let stateData = State.getStatesOfCountry('FR').filter((item) => !/\d/.test(item.isoCode) &&
                                                                     !blackListedStates.includes(item.isoCode));
 
@@ -17,6 +18,7 @@ export default function SignUpLocation({navigation}) {
     const [city, setCity] = useState();
     const [cityData, setCityData] = useState();
     const [isFocus, setIsFocus] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setCityData(City.getCitiesOfState('FR', state?.isoCode));
@@ -25,6 +27,22 @@ export default function SignUpLocation({navigation}) {
     useEffect(() => {
         cityData && setCity(cityData[0]);
     }, [cityData]);
+
+    const handleSubmit = async () => {
+        setLoading(true);
+        try {
+            const newUser = {
+                ...route.params.newUser,
+                region: {...state},
+                city: {...city}
+            };
+            const response = await axios.post('http://192.168.1.17:3000/api/users/register', newUser);
+            navigation.navigate('Confirmation email', {success: true, message: 'Votre compte a été créé avec succès !', userId: response.data.user, email: newUser.email});
+        } catch (e) {
+            console.log('Sign up location page' + e);
+        }
+        setLoading(false);
+    };
 
     return (
         <SafeAreaView style={[StyleSheet.container, {flex: 1}]}>
@@ -75,7 +93,7 @@ export default function SignUpLocation({navigation}) {
                       setIsFocus(false);
                     }}
                 />
-                <DefaultButton title='Terminer'/>
+                {loading ? <ActivityIndicator color='#f26619' style={styles.activityIndicator}/> : <DefaultButton title='Terminer' onPress={handleSubmit}/>}
             </ScrollView>
         </SafeAreaView>
     );
@@ -121,4 +139,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderRadius: 20,
     },
+    activityIndicator: {
+        marginVertical: 40
+    }
 });

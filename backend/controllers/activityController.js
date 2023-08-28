@@ -1,5 +1,7 @@
 const User = require('../models/UserModel');
 const Activity = require('../models/activityModel');
+const User = require('../models/UserModel');
+const { getActivities, getUsers } = require('../utils/controllerFunctions');
 const { createActivityErrors } = require('../utils/error');
 
 // Create an activity
@@ -40,3 +42,25 @@ module.exports.deleteActivity = (req, res) => {
     .then(() => res.status(200).json({ message: 'Activity deleted !' }))
     .catch(error => res.status(200).json({ error }));
 };
+
+// Get the count of users for each activity
+module.exports.getCount = async (req, res) => {
+  try {
+    const activities = await getActivities();
+    const activitiesDict = [];
+    const users = await getUsers();
+    activities.forEach((activity) => {
+      activitiesDict.push({name: activity.name, id: activity._id, users: 0});
+    });
+    users.forEach((user) => {
+      activitiesDict.forEach((activity) => {
+        if (user.activities.includes(activity.id)) {
+          activity.users++;
+        }
+      })
+    })
+    res.status(200).json(activitiesDict);
+  } catch (error) {
+    res.status(200).json({ error });
+  }
+}

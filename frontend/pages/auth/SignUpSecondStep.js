@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 import { Snackbar } from '@react-native-material/core';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
@@ -25,6 +25,24 @@ export default function SignUpSecondStep({route, navigation}) {
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const customOnFocus = () => {
+        setSnackBarVisible(false);
+    };
+
+    const formatText = (text) => {
+        if (!text) {
+          return '';
+        }
+    
+        const cleanedText = text.replace(/[^\d]/g, '');
+        const day = cleanedText.slice(0, 2);
+        const month = cleanedText.slice(2, 4);
+        const year = cleanedText.slice(4, 8);
+    
+        return `${day}${day && month ? '/' : ''}${month}${month && year ? '/' : ''}${year}`;
+    };
+
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -57,7 +75,7 @@ export default function SignUpSecondStep({route, navigation}) {
                     navigation.navigate('Troisième étape', {newUser});
                 }
             } catch (e) {
-                console.log(e);
+                console.log('Sin up second step page' + e);
             }
         }
         setLoading(false);
@@ -79,6 +97,7 @@ export default function SignUpSecondStep({route, navigation}) {
                     text={lastName}
                     onChangeText={onChangeLastName}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 <DefaultInput 
                     customPlaceholder="Prénom"
@@ -87,6 +106,7 @@ export default function SignUpSecondStep({route, navigation}) {
                     text={firstName}
                     onChangeText={onChangeFirstName}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 <DefaultInput 
                     customPlaceholder="Nom d'utilisateur"
@@ -95,15 +115,17 @@ export default function SignUpSecondStep({route, navigation}) {
                     text={username}
                     onChangeText={onChangeUsername}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 <DefaultInput 
                     customPlaceholder="Date de naissance JJ/MM/AAAA"
                     isPassword={false}
                     icon="calendar"
-                    text={birthday}
+                    text={formatText(birthday)}
                     onChangeText={onChangeBirthday}
                     margin={20}
                     isNumeric={true}
+                    onFocus={customOnFocus}
                 />
                 {loading ? <ActivityIndicator color='#f26619' style={styles.activityIndicator}/> : <DefaultButton title="Suivant" onPress={handleSubmit}/>}
             </ScrollView>

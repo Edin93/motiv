@@ -67,6 +67,7 @@ const userSchema = new mongoose.Schema(
         },
         picture: {
             type: String,
+            default: './uploads/default.png'
         },
         notifications: {
             type: [String],
@@ -101,16 +102,11 @@ userSchema.pre("save", async function(next) {
 userSchema.statics.login = async function(email, password) {
     const user = await this.findOne({email});
     if (user) {
-        if(user.emailConfirm)
-        {
-
-            const auth = await bcrypt.compare(password, user.password);
-            if (auth) {
-                return user;
-            }
-            throw Error('incorrect password');
+        const auth = await bcrypt.compare(password, user.password);
+        if (auth) {
+            return user;
         }
-        throw Error('incorrect validation')
+        throw Error('incorrect password');
     }
     throw Error('incorrect email');
 }

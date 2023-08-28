@@ -10,27 +10,18 @@ export default function DefaultInput(props) {
         text,
         onChangeText,
         margin,
-        isNumeric
+        isNumeric,
+        onFocus
     } = props;
 
     const [customBorderWidth, setBorderWidth] = useState(0);
     const [showPassword, setShowPassword] = useState(false);
 
-    const customOnFocus = () => {setBorderWidth(2);};
-    const customOnBlur = () => {setBorderWidth(0);};
-
-    const formatText = (text) => {
-        if (!text) {
-          return '';
-        }
-    
-        const cleanedText = text.replace(/[^\d]/g, '');
-        const day = cleanedText.slice(0, 2);
-        const month = cleanedText.slice(2, 4);
-        const year = cleanedText.slice(4, 8);
-    
-        return `${day}${day && month ? '/' : ''}${month}${month && year ? '/' : ''}${year}`;
+    const customOnFocus = () => {
+        setBorderWidth(2);
+        onFocus();
     };
+    const customOnBlur = () => {setBorderWidth(0);};
 
     return (
         <View style={[styles.sectionStyle, {borderWidth: customBorderWidth, margin: margin}]}>
@@ -43,7 +34,7 @@ export default function DefaultInput(props) {
                 onBlur={customOnBlur}
                 style={styles.input}
                 onChangeText={onChangeText}
-                value={isNumeric ? formatText(text) : text}
+                value={text}
                 placeholder={customPlaceholder}
                 placeholderTextColor='#B6B6B6'
                 underlineColorAndroid='transparent'

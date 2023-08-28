@@ -5,16 +5,19 @@ import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, ScrollView, SafeAreaView, Image, Text, ActivityIndicator } from 'react-native';
 
-const MAIN_TITLE = "Mot de passe oublié";
-const SUBTITLE = "Renseigne ton mail pour pouvoir réinitialiser ton mot de passe";
-const SUBTITLE_CONFIRMATION = "Un mot de passe à usage unique a été envoyé par mail. Renseigne-le lors de ta prochaine connexion. Tu pourras ensuite définir ton nouveau mot de passe.";
+const MAIN_TITLE = "Nouveau mot de passe";
+const SUBTITLE = "Définis ton nouveau mot de passe";
 
-export default function ForgotPassword({navigation}) {
-    const [email, onChangeEmail] = useState('');
-    const [isMailSent, setIsMailSent] = useState(false);
+export default function ResetPassword({route, navigation}) {
+    const [password, onChangePassword] = useState('');
+    const [confirmPassword, onChangeConfirmPassword] = useState('');
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const userId = route.params.userId;
+    const email = route.params.email;
+    const emailConfirm = route.params.emailConfirm;
 
     const customOnFocus = () => {
         setSnackBarVisible(false);
@@ -22,15 +25,26 @@ export default function ForgotPassword({navigation}) {
 
     const handleSubmit = async () => {
         setLoading(true);
-        if (!email) {
+        if (!password || !confirmPassword) {
             setSnackBarVisible(true);
-            setErrorMessage('Un email doit être renseigné pour pouvoir continuer');
+            setErrorMessage('Tous les champs doivent être remplis pour continuer');
+        } else if (password != confirmPassword) {
+            setSnackBarVisible(true);
+            setErrorMessage('Les deux mots de passe ne correspondent pas');
         }
         try {
-            const response = await axios.post('http://192.168.1.17:3000/api/users/forgot-password', {email});
-            setIsMailSent(true);
+            const response = await axios.post(`http://192.168.1.17:3000/api/users/reset-password/${userId}`, {password, confirmPassword});
+            if ('user' in response.data) {
+                if (!emailConfirm) {
+                    navigation.navigate('Confirmation email', {userId, email});
+                }
+                console.log('On est tout bon !');
+            } else if ('errors' in response.data) {
+                setSnackBarVisible(true);
+                setErrorMessage(response.data.errors);
+            }
         } catch (e) {
-            console.log('Forgot password page: ' + e);
+            console.log('Reset password page: ' + e);
         }
         setLoading(false);
     };
@@ -43,25 +57,29 @@ export default function ForgotPassword({navigation}) {
                     style={styles.imageStyle}
                 />
                 <Text style={styles.mainTitle}>{MAIN_TITLE}</Text>
-                
-                {isMailSent ? 
-                <Text style={styles.subTitle}>{SUBTITLE_CONFIRMATION}</Text> :
-                <>
                     <Text style={styles.subTitle}>{SUBTITLE}</Text>
                     <DefaultInput 
-                        customPlaceholder="Email"
-                        isPassword={false}
-                        icon="mail"
-                        text={email}
-                        onChangeText={onChangeEmail}
+                        customPlaceholder="Nouveau mot de passe"
+                        isPassword={true}
+                        icon="lock"
+                        text={password}
+                        onChangeText={onChangePassword}
+                        margin={20}
+                        onFocus={customOnFocus}
+                    />
+                    <DefaultInput 
+                        customPlaceholder="Confirmation du mot de passe"
+                        isPassword={true}
+                        icon="lock"
+                        text={confirmPassword}
+                        onChangeText={onChangeConfirmPassword}
                         margin={20}
                         onFocus={customOnFocus}
                     />
                     {loading ? <ActivityIndicator style={styles.activityIndicator} color='#f26619'/> :
-                    <DefaultButton title="Envoyer" onPress={handleSubmit}/>}
-                </>
-                }
+                    <DefaultButton title="Confirmer" onPress={handleSubmit}/>}
             </ScrollView>
+            {snackBarVisible && <Snackbar message={errorMessage} style={styles.snackBar}/>}
         </SafeAreaView>
         
     );

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 import { Snackbar } from '@react-native-material/core';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
@@ -15,6 +15,10 @@ export default function SignUpFirstStep({navigation}) {
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const customOnFocus = () => {
+        setSnackBarVisible(false);
+    };
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -44,7 +48,7 @@ export default function SignUpFirstStep({navigation}) {
                     navigation.navigate('Seconde étape', { newUser });
                 }
             } catch (e) {
-                console.log(e);
+                console.log('Sin up first step page' + e);
             }
         }
         setLoading(false);
@@ -66,6 +70,7 @@ export default function SignUpFirstStep({navigation}) {
                     text={email}
                     onChangeText={onChangeEmail}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 <DefaultInput 
                     customPlaceholder="Mot de passe"
@@ -74,6 +79,7 @@ export default function SignUpFirstStep({navigation}) {
                     text={password}
                     onChangeText={onChangePassword}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 <DefaultInput 
                     customPlaceholder="Confirmer le mot de passe"
@@ -82,6 +88,7 @@ export default function SignUpFirstStep({navigation}) {
                     text={confirmPassword}
                     onChangeText={onChangeConfirmPassword}
                     margin={20}
+                    onFocus={customOnFocus}
                 />
                 {loading ? <ActivityIndicator color='#f26619' style={styles.activityIndicator}/> : <DefaultButton title="Suivant" onPress={handleSubmit}/>}
             </ScrollView>
