@@ -19,7 +19,10 @@ WORKDIR /usr/src/app/frontend
 ENV PATH /opt/frontend/.bin:$PATH
 
 # step 4.1: Install the Expo CLI globally
-RUN npm i --unsafe-perm --allow-root -g npm@latest expo-cli@latest
+RUN npm i -y --unsafe-perm --allow-root -g npm@latest expo-cli@latest
+
+# Step 4.2: Install @expo/ngrok globally to enable docker tunneling
+RUN npm install -y --global @expo/ngrok@^4.1.0
 
 # Step 5: Copy package.json and package-lock.json (if available) to leverage Docker caching
 COPY frontend/package*.json ./
@@ -35,4 +38,5 @@ COPY .git /usr/src/app/.git/
 
 
 # Step 10: Specify the command to start the Expo development server
-CMD ["npm", "run", "start"]
+# CMD ["npm", "run", "start"]
+CMD REACT_NATIVE_PACKAGER_HOSTNAME=$(ip route | awk 'NR==1 {print $3}') npm run start
