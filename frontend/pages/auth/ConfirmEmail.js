@@ -7,7 +7,7 @@ import { StyleSheet, SafeAreaView, ScrollView, Image, Text, ActivityIndicator, V
 
 const MAINTITLE = "Confirme ton adresse email";
 const SUBTITLE = "Entre le code à 4 chiffres reçu à l'adresse ";
-const IP_ADDRESS="192.168.1.17";
+const IP_ADDRESS="192.168.1.36";
 
 export default function ConfirmEmail({route, navigation}) {
     const userId = route.params.userId;

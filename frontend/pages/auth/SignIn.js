@@ -31,9 +31,9 @@ export default function SignIn({navigation}) {
     const checkCredentials = async () => {
         setLoading(true);
         try {
-            const response = await axios.post('http://192.168.1.17:3000/api/users/login', {email, password});
+            const response = await axios.post('http://192.168.1.36:3000/api/users/login', {email, password});
             if ('user' in response.data) {
-                const user = await axios.get(`http://192.168.1.17:3000/api/users/${response.data.user}`);
+                const user = await axios.get(`http://192.168.1.36:3000/api/users/${response.data.user}`);
                 if (user.data.hasToUpdatePassword) {
                     setSnackBarVisible(false);
                     navigation.navigate('Nouveau mot de passe', {userId: user.data._id, emailConfirm: user.emailConfirm, email: user.email});
