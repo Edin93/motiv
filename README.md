@@ -11,6 +11,10 @@
     * ...
     * For more informations about the tools and their versions check the Technical part on [Notion](https://www.notion.so/Technical-b0b079be97bd4ef183235744489eccd1).
 
+#### Installing Android Studio
+* If you want to run the frontend application part on an android emulator, you can either scan the code or install Android Studio. If so, you need to run the following commands:
+    * [Set up Android Studio's tools](https://docs.expo.dev/workflow/android-studio-emulator/).
+
 #### Using Docker without needing to use sudo
 * To be able to use Docker without `sudo` each time, you need to do the following steps:
 * Add the docker group if it doesn't already exist:
