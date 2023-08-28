@@ -33,9 +33,13 @@ export default function SignIn({navigation}) {
         try {
             const response = await axios.post('http://192.168.1.17:3000/api/users/login', {email, password});
             if ('user' in response.data) {
-                if (!response.data.user.emailConfirm) {
+                const user = await axios.get(`http://192.168.1.17:3000/api/users/${response.data.user}`);
+                if (user.data.hasToUpdatePassword) {
                     setSnackBarVisible(false);
-                    navigation.navigate('Confirmation email', {userId: response.data.user._id, email});
+                    navigation.navigate('Nouveau mot de passe', {userId: user.data._id, emailConfirm: user.emailConfirm, email: user.email});
+                } else if (!user.data.emailConfirm) {
+                    setSnackBarVisible(false);
+                    navigation.navigate('Confirmation email', {userId: user.data._id, email});
                 } else {
                     console.log('L\'utilisateur est bien connecté !');  
                 }
@@ -115,9 +119,6 @@ const styles = StyleSheet.create({
         width: '60%',
         height: 120,
         alignSelf: 'center'
-    },
-    snackBar: {
-        backgroundColor: 'red',
     },
     snackBar: {
         backgroundColor: 'red',

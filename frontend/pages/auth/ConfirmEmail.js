@@ -55,6 +55,10 @@ export default function ConfirmEmail({route, navigation}) {
 
     const handleSubmit = async () => {
         setLoading(true);
+        if (!code) {
+            setSnackBarVisible(true);
+            setSnackBarMessage('Vous devez renseigner un code pour continuer');
+        }
         try {
             const response = await axios.post(`http://${IP_ADDRESS}:3000/api/users/confirm-email/${userId}`, {tmp_code: Number(code)});
             const message = response.data.errors.message;

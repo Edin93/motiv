@@ -12,7 +12,6 @@ const generateToken = (id) => {
 
 // Sign Up and send a email confirmation
 module.exports.signUp = async (req, res) => {
-  const { password } = req.body;
   try {
     const user = await User.create({ ...req.body });
     const token = generateToken(user._id);
@@ -120,7 +119,7 @@ module.exports.resetPassword = async (req, res) => {
             { password: newPassword, hasToUpdatePassword: false },
             { new: true }
             );
-            res.status(200).json('Réinitialisation du mot passe réussie');
+            res.status(200).json({user: user._id});
         }
         else {
           res.status(200).json({errors: "Les deux mots de passe ne correspondent pas"});

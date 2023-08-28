@@ -4,6 +4,7 @@ import SignUpSecondStep from './pages/auth/SignUpSecondStep';
 import SignUpActivities from './pages/auth/SignUpActivities';
 import SignUpLocation from './pages/auth/SinUpLocation';
 import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 import ConfirmEmail from './pages/auth/ConfirmEmail';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -43,6 +44,11 @@ export default function App() {
         <Stack.Screen
           name='Mot de passe oublié'
           component={ForgotPassword}
+          options={options}
+        />
+        <Stack.Screen
+          name='Nouveau mot de passe'
+          component={ResetPassword}
           options={options}
         />
         <Stack.Screen
