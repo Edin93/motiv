@@ -26,7 +26,7 @@ module.exports.generateNewPassword = () => {
   password += symbols[randomSymbolIndex1];
   password += symbols[randomSymbolIndex2];
 
-  for (let i = password.length; i < 10; i++) {
+  for (let i = password.length; i < 12; i++) {
     const randomIndex = Math.floor(Math.random() * allCharacters.length);
     password += allCharacters[randomIndex];
   }

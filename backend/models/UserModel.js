@@ -27,11 +27,11 @@ const userSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
-        firstname: {
+        firstName: {
             type: String,
             trim: true,
         },
-        lastname: {
+        lastName: {
             type: String,
             trim: true
         },
