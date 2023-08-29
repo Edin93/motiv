@@ -57,7 +57,8 @@ module.exports.sendConfirmationCode = async (req, res) => {
 module.exports.confirmEmail = async (req, res) => {
   const { tmp_code } = req.body;
   const user = await User.findOne({ _id: req.params.id});
-  const errors = {message: ''}
+  const errors = {message: ''};
+  let token;
   if (user) {
     try {
       const currentTime = new Date();
@@ -71,6 +72,7 @@ module.exports.confirmEmail = async (req, res) => {
           { emailConfirm: true, tmp_code: null, tmp_code_expiration: null },
           { new: true }
         );
+        token = generateToken(user._id);
       }
     } catch (error) {
       res.status(200).json({ error });
@@ -78,7 +80,7 @@ module.exports.confirmEmail = async (req, res) => {
   } else {
     errors.message = 'Email inconnu';
   }
-  res.status(200).json({errors});
+  res.status(200).json({errors, token});
 }
 
 // Send an email with a new password generated randomly and
@@ -119,7 +121,8 @@ module.exports.resetPassword = async (req, res) => {
             { password: newPassword, hasToUpdatePassword: false },
             { new: true }
             );
-            res.status(200).json({user: user._id});
+            const token = generateToken(user._id);
+            res.status(200).json({user: user._id, token});
         }
         else {
           res.status(200).json({errors: "Les deux mots de passe ne correspondent pas"});
@@ -183,7 +186,7 @@ module.exports.checkToken = (req, res) => {
       if (err) return res.sendStatus(403)
       User.findById(userId.id)
         .then((user) => {
-            res.status(200).json(user._id);
+            res.status(200).json({user: user._id});
         })
         .catch(err => res.status(500).send(err));
   });

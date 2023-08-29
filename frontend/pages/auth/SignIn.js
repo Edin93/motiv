@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Snackbar } from '@react-native-material/core';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     ActivityIndicator,
     StyleSheet,
@@ -17,7 +18,9 @@ import {
 const MAIN_TITLE = "Content de te revoir !";
 const SUBTITLE = "Identifie-toi";
 
-export default function SignIn({navigation}) {
+export default function SignIn(props) {
+    const {setIsLoggedIn, navigation} = props;
+
     const [email, onChangeEmail] = useState('');
     const [password, onChangePassword] = useState('');
     const [snackBarVisible, setSnackBarVisible] = useState(false);
@@ -36,12 +39,14 @@ export default function SignIn({navigation}) {
                 const user = await axios.get(`http://192.168.1.17:3000/api/users/${response.data.user}`);
                 if (user.data.hasToUpdatePassword) {
                     setSnackBarVisible(false);
-                    navigation.navigate('Nouveau mot de passe', {userId: user.data._id, emailConfirm: user.emailConfirm, email: user.email});
+                    navigation.navigate('Nouveau mot de passe', {userId: user.data._id, emailConfirm: user.data.emailConfirm, email: user.data.email});
                 } else if (!user.data.emailConfirm) {
                     setSnackBarVisible(false);
                     navigation.navigate('Confirmation email', {userId: user.data._id, email});
                 } else {
-                    console.log('L\'utilisateur est bien connecté !');  
+                    console.log('L\'utilisateur est bien connecté !');
+                    await AsyncStorage.setItem('authToken', response.data.token);
+                    setIsLoggedIn(true);
                 }
             } else if ('errors' in response.data) {
                 setSnackBarVisible(true);
