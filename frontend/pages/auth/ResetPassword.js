@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Snackbar } from '@react-native-material/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, ScrollView, SafeAreaView, Image, Text, ActivityIndicator } from 'react-native';
@@ -8,7 +9,9 @@ import { StyleSheet, ScrollView, SafeAreaView, Image, Text, ActivityIndicator } 
 const MAIN_TITLE = "Nouveau mot de passe";
 const SUBTITLE = "Définis ton nouveau mot de passe";
 
-export default function ResetPassword({route, navigation}) {
+export default function ResetPassword(props) {
+    const {setIsLoggedIn, route, navigation} = props;
+
     const [password, onChangePassword] = useState('');
     const [confirmPassword, onChangeConfirmPassword] = useState('');
     const [snackBarVisible, setSnackBarVisible] = useState(false);
@@ -38,7 +41,8 @@ export default function ResetPassword({route, navigation}) {
                 if (!emailConfirm) {
                     navigation.navigate('Confirmation email', {userId, email});
                 }
-                console.log('On est tout bon !');
+                await AsyncStorage.setItem('authToken', response.data.token);
+                setIsLoggedIn(true);
             } else if ('errors' in response.data) {
                 setSnackBarVisible(true);
                 setErrorMessage(response.data.errors);

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Snackbar } from '@react-native-material/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text, ActivityIndicator, View, Pressable } from 'react-native';
@@ -9,7 +10,9 @@ const MAINTITLE = "Confirme ton adresse email";
 const SUBTITLE = "Entre le code à 4 chiffres reçu à l'adresse ";
 const IP_ADDRESS="192.168.1.36";
 
-export default function ConfirmEmail({route, navigation}) {
+export default function ConfirmEmail(props) {
+    const {setIsLoggedIn, navigation, route} = props;
+
     const userId = route.params.userId;
     const email = route.params.email;
 
@@ -68,8 +71,8 @@ export default function ConfirmEmail({route, navigation}) {
                 setSnackBarMessage(message);
             } else {
                 setSnackBarVisible(false);
-                setSuccessSnackBarVisible(true);
-                setSnackBarMessage(`Tout est bon !`); 
+                await AsyncStorage.setItem('authToken', response.data.token);
+                setIsLoggedIn(true);
             }
         } catch (e) {
             console.log('Confirm email page' + e);

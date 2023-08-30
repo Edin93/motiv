@@ -67,6 +67,7 @@ export default function ForgotPassword({navigation}) {
                 </>
                 }
             </ScrollView>
+            {snackBarVisible && <Snackbar message={errorMessage} style={styles.snackBar}/>}
         </SafeAreaView>
         
     );
