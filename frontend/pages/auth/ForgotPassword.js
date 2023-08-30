@@ -28,7 +28,12 @@ export default function ForgotPassword({navigation}) {
         }
         try {
             const response = await axios.post('http://192.168.1.17:3000/api/users/forgot-password', {email});
-            setIsMailSent(true);
+            if ('errors' in response.data) {
+                setSnackBarVisible(true);
+                setErrorMessage(response.data.errors);
+            } else {
+                setIsMailSent(true);
+            }
         } catch (e) {
             console.log('Forgot password page: ' + e);
         }
