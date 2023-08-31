@@ -8,10 +8,36 @@ import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
 import ConfirmEmail from './pages/auth/ConfirmEmail';
 import Profile from './pages/dashboard/Profile';
+import Events from './pages/dashboard/Events';
 import { useState, useEffect } from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Tab = createBottomTabNavigator();
+const tabBarScreenOptions = ({route}) => ({
+  tabBarStyle: {
+    marginHorizontal: 60,
+    marginBottom: 40,
+    paddingBottom: 0,
+    borderTopWidth: 0,
+    borderColor: '#fff',
+    borderRadius: 30,
+    shadowColor: 'black',
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 5
+  },
+  tabBarShowLabel: false,
+  tabBarIcon: ({focused}) => {
+    const color = focused ? '#f26619' : 'grey';
+    const name = route.name == 'Profil' ? 'person' : 'calendar-today';
+    return (<Icon name={name} color={color} size={40}/>);
+  },
+  headerShown: false
+});
 
 const Stack = createNativeStackNavigator();
 const navTheme = {
@@ -58,7 +84,15 @@ export default function App() {
 
   return (
     <NavigationContainer theme={navTheme}>
-      {isLoggedIn ? <Profile setIsLoggedIn={setIsLoggedIn} user={user}/> :
+      {isLoggedIn ?
+      <Tab.Navigator screenOptions={tabBarScreenOptions}>
+        <Tab.Screen name="Profil">
+          {props => <Profile setIsLoggedIn={setIsLoggedIn} user={user}/>}
+        </Tab.Screen>
+        <Tab.Screen name="Événements">
+          {props => <Events setIsLoggedIn={setIsLoggedIn} user={user}/>}
+        </Tab.Screen>
+      </Tab.Navigator> :
       <Stack.Navigator screenOptions={screenOptions}>
         <Stack.Screen
           name="Identification"

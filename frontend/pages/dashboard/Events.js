@@ -6,10 +6,10 @@ import DefaultButton from '../../components/general/DefaultButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, ScrollView, SafeAreaView, Image, Text, ActivityIndicator, Pressable } from 'react-native';
 
-const MAIN_TITLE = "Tu es connecté !";
-const SUBTITLE = "Ceci est la page profile";
+const MAIN_TITLE = "Événements";
+const SUBTITLE = "Voici les événements disponibles";
 
-export default function Profile(props) {
+export default function Events(props) {
     const {setIsLoggedIn, user} = props;
 
     return (
@@ -17,9 +17,6 @@ export default function Profile(props) {
             <ScrollView automaticallyAdjustKeyboardInsets>
                 <Text style={styles.mainTitle}>{MAIN_TITLE}</Text>
                 <Text style={styles.subTitle}>{SUBTITLE}</Text>
-                <Pressable onPress={async () => {AsyncStorage.removeItem('authToken'); setIsLoggedIn(false);}}>
-                    <Text style={[styles.subTitle, {color: 'red'}]}>Se déconnecter</Text>
-                </Pressable>
             </ScrollView>
         </SafeAreaView>
     );
