@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const activitySchema = require('./activityModel');
 const regionSchema = require('./regionModel');
 const citySchema = require('./cityModel');
 
@@ -19,14 +18,10 @@ const eventSchema = mongoose.Schema(
       maxlength: 200,
     },
     activity: {
-      type: activitySchema,
+      type: String,
       required: true,
     },
     isPrivate: {
-      type: Boolean,
-      default: false,
-    },
-    womenOnly: {
       type: Boolean,
       default: false,
     },
@@ -38,14 +33,16 @@ const eventSchema = mongoose.Schema(
       type: Number,
     },
     start: {
-      type: Date,
-      required: true,
+      type: String,
     },
-    participants : {
+    end: {
+      type: String,
+    },
+    participants: {
       type: [String]
     },
     lastCancelation: {
-      type: Date,
+      type: String,
     },
     region: {
       type: regionSchema,
