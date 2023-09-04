@@ -1,5 +1,6 @@
 const Activity = require('../models/activityModel');
 const User = require('../models/UserModel');
+const Event = require('../models/eventModel');
 
 module.exports.getActivities = async () => {
   const activities = await Activity.find()
@@ -14,3 +15,21 @@ module.exports.getUsers = async () => {
     .catch((error) => {return error});
   return users;
 }
+
+module.exports.deleteCompletedEvents = () => {
+  setInterval( async () => {
+    await Event.find()
+      .then((events) => {
+        const date = new Date();
+        events.forEach((event) => {
+          const cancelDate = new Date(event.end);
+          cancelDate.setDate(cancelDate.getDate() + 7);
+          if (date > cancelDate) {
+            Event.deleteOne({ _id: event._id})
+              .then(() => {});
+          }
+        })
+      })
+      .catch((err) => console.log(err));
+  }, 5000);
+};

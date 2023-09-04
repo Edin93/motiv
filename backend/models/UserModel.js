@@ -30,10 +30,16 @@ const userSchema = new mongoose.Schema(
         firstName: {
             type: String,
             trim: true,
+            required: true,
         },
         lastName: {
             type: String,
-            trim: true
+            trim: true,
+            required: true,
+        },
+        birthday: {
+            type: String,
+            required: true
         },
         hasToUpdatePassword: {
             type: Boolean,
@@ -46,10 +52,12 @@ const userSchema = new mongoose.Schema(
         region: {
             type: regionSchema,
             trim: true,
+            required: true,
         },
         city: {
             type: citySchema,
             trim: true,
+            required: true,
         },
         biography: {
             type: String,
