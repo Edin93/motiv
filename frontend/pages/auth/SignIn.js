@@ -19,7 +19,7 @@ const MAIN_TITLE = "Content de te revoir !";
 const SUBTITLE = "Identifie-toi";
 
 export default function SignIn(props) {
-    const {setIsLoggedIn, navigation} = props;
+    const {setIsLoggedIn, setUser, navigation} = props;
 
     const [email, onChangeEmail] = useState('');
     const [password, onChangePassword] = useState('');
@@ -33,10 +33,11 @@ export default function SignIn(props) {
 
     const checkCredentials = async () => {
         setLoading(true);
+        await new Promise(resolve => setTimeout(resolve, 1000));
         try {
-            const response = await axios.post('http://192.168.1.36:3000/api/users/login', {email, password});
+            const response = await axios.post('http://192.168.1.17:3000/api/users/login', {email, password});
             if ('user' in response.data) {
-                const user = await axios.get(`http://192.168.1.36:3000/api/users/${response.data.user}`);
+                const user = await axios.get(`http://192.168.1.17:3000/api/users/${response.data.user}`);
                 if (user.data.hasToUpdatePassword) {
                     setSnackBarVisible(false);
                     navigation.navigate('Nouveau mot de passe', {userId: user.data._id, emailConfirm: user.data.emailConfirm, email: user.data.email});
@@ -46,6 +47,7 @@ export default function SignIn(props) {
                 } else {
                     console.log('L\'utilisateur est bien connecté !');
                     await AsyncStorage.setItem('authToken', response.data.token);
+                    setUser(user.data._id);
                     setIsLoggedIn(true);
                 }
             } else if ('errors' in response.data) {

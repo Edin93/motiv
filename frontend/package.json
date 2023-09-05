@@ -11,7 +11,9 @@
   "dependencies": {
     "@expo/ngrok": "^4.1.0",
     "@expo/webpack-config": "^18.0.1",
+    "@react-native-async-storage/async-storage": "1.17.11",
     "@react-native-material/core": "^1.3.7",
+    "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
     "axios": "^1.4.0",
@@ -23,8 +25,7 @@
     "react-native": "0.71.8",
     "react-native-element-dropdown": "^2.9.0",
     "react-native-vector-icons": "^10.0.0",
-    "react-native-web": "~0.18.10",
-    "@react-native-async-storage/async-storage": "1.17.11"
+    "react-native-web": "~0.18.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

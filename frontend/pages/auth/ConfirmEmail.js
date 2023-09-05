@@ -8,10 +8,10 @@ import { StyleSheet, SafeAreaView, ScrollView, Image, Text, ActivityIndicator, V
 
 const MAINTITLE = "Confirme ton adresse email";
 const SUBTITLE = "Entre le code à 4 chiffres reçu à l'adresse ";
-const IP_ADDRESS="192.168.1.36";
+const IP_ADDRESS="192.168.1.17";
 
 export default function ConfirmEmail(props) {
-    const {setIsLoggedIn, navigation, route} = props;
+    const {setIsLoggedIn, setUser, navigation, route} = props;
 
     const userId = route.params.userId;
     const email = route.params.email;
@@ -72,6 +72,7 @@ export default function ConfirmEmail(props) {
             } else {
                 setSnackBarVisible(false);
                 await AsyncStorage.setItem('authToken', response.data.token);
+                setUser(userId);
                 setIsLoggedIn(true);
             }
         } catch (e) {
