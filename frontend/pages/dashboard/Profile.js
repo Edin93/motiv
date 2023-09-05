@@ -23,19 +23,21 @@ export default function Profile(props) {
     const [userEvents, setUserEvents] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [update, setUpdate] = useState(false);
+    const [picture, setPicture] = useState('');
 
     useEffect(() => {
         const getLoggedUser = async () => {
             try {
-                const userObject = await axios.get(`http://192.168.1.17:3000/api/users/${user}`);
+                const userObject = await axios.get(`http://192.168.1.36:3000/api/users/${user}`);
                 setUsername(userObject.data.username);
                 setRecommendation(userObject.data.recommandations.length);
                 setOriganizedEvents(userObject.data.organized_events.length);
                 setParticipations(userObject.data.participations.length);
-                setCredits(userObject.data.credits)
+                setCredits(userObject.data.credits);
+                setPicture(userObject.data.picture);
                 const activities = [];
                 for (const activity of userObject.data.activities) {
-                    const res = await axios.get(`http://192.168.1.17:3000/api/activities/${activity}`);
+                    const res = await axios.get(`http://192.168.1.36:3000/api/activities/${activity}`);
                     activities.push(res.data);
                 }
                 setUserActivities(activities);
@@ -49,7 +51,7 @@ export default function Profile(props) {
     }, [update]);
 
     const handleOpenModal = async () => {
-        axios.get('http://192.168.1.17:3000/api/activities/')
+        axios.get('http://192.168.1.36:3000/api/activities/')
         .then((res) => {
             setAllActivities(res.data);
         })
@@ -63,7 +65,7 @@ export default function Profile(props) {
                 setSnackBarVisible(true);
                 setErrorMessage('Vous devez selectionner au moins une activité');
             } else {
-                await axios.put(`http://192.168.1.17:3000/api/users/${user}`, {activities: selectedActivities});
+                await axios.put(`http://192.168.1.36:3000/api/users/${user}`, {activities: selectedActivities});
                 setSnackBarVisible(false);
                 setUpdate(!update);
                 setModalVisible(!modalVisible);
@@ -171,7 +173,7 @@ export default function Profile(props) {
             <View style={{marginTop: 50, zIndex: 10}}>
                 <View style={{flex: 1, alignItems: 'center'}}>
                     <Image
-                        source={require('../../uploads/default.png')}
+                        source={{uri: `http://qz1b49y.anonymous.19000.exp.direct/assets/uploads/${picture}`}}
                         style={styles.imageStyle}
                     />
                     <View style={styles.usernameSection}>
