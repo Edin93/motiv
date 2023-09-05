@@ -65,7 +65,7 @@ module.exports.uploadImage = async (req, res) => {
   const dirImage = `${__dirname}/../../frontend/uploads/${filename}`;
   try {
     await sharp(req.file.buffer).resize({width: 250, height: 250}).png().toFile(dirImage);
-    User.findOneAndUpdate({_id: userId}, {picture: `./uploads/${filename}`}, {new: true})
+    User.findOneAndUpdate({_id: userId}, {picture: `${filename}`}, {new: true})
       .then((user) => res.status(200).json(user))
       .catch((err) => res.status(200).json({ err }));
   } catch (err) {

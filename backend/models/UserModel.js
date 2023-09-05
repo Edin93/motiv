@@ -75,7 +75,7 @@ const userSchema = new mongoose.Schema(
         },
         picture: {
             type: String,
-            default: './uploads/default.png'
+            default: 'default.png'
         },
         notifications: {
             type: [String],
