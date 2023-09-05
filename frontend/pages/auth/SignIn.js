@@ -19,7 +19,7 @@ const MAIN_TITLE = "Content de te revoir !";
 const SUBTITLE = "Identifie-toi";
 
 export default function SignIn(props) {
-    const {setIsLoggedIn, navigation} = props;
+    const {setIsLoggedIn, setUser, navigation} = props;
 
     const [email, onChangeEmail] = useState('');
     const [password, onChangePassword] = useState('');
@@ -47,6 +47,7 @@ export default function SignIn(props) {
                 } else {
                     console.log('L\'utilisateur est bien connecté !');
                     await AsyncStorage.setItem('authToken', response.data.token);
+                    setUser(user.data._id);
                     setIsLoggedIn(true);
                 }
             } else if ('errors' in response.data) {

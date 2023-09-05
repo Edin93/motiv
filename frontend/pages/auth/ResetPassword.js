@@ -10,7 +10,7 @@ const MAIN_TITLE = "Nouveau mot de passe";
 const SUBTITLE = "Définis ton nouveau mot de passe";
 
 export default function ResetPassword(props) {
-    const {setIsLoggedIn, route, navigation} = props;
+    const {setIsLoggedIn, setUser, route, navigation} = props;
 
     const [password, onChangePassword] = useState('');
     const [confirmPassword, onChangeConfirmPassword] = useState('');
@@ -42,6 +42,7 @@ export default function ResetPassword(props) {
                     navigation.navigate('Confirmation email', {userId, email});
                 }
                 await AsyncStorage.setItem('authToken', response.data.token);
+                setUser(userId);
                 setIsLoggedIn(true);
             } else if ('errors' in response.data) {
                 setSnackBarVisible(true);

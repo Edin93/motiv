@@ -8,11 +8,12 @@ export default function Activity(props) {
         iconColor,
         activity,
         select,
-        unselect
+        unselect,
+        selected
     } = props;
 
     const [isSelected, setIsSelected] = useState(false);
-    const [customBorderWidth, setBorderWidth] = useState(0);
+    const [customBorderWidth, setBorderWidth] = useState(selected ? 2 : 0);
 
     const selectActivity = (isSelected) => {
         if (isSelected) {
@@ -24,12 +25,14 @@ export default function Activity(props) {
     }
 
     const handleOnPress = (isSelected) => {
-        if (isSelected) {
-            select();
-        } else {
-            unselect();
+        if (!selected) {
+            if (isSelected) {
+                select();
+            } else {
+                unselect();
+            }
+            selectActivity(isSelected);  
         }
-        selectActivity(isSelected);  
     };
 
     return (
