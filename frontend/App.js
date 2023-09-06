@@ -102,7 +102,7 @@ export default function App() {
       <Tab.Navigator screenOptions={tabBarScreenOptions}>
         <Tab.Screen name="ProfilStack" component={ProfileStackScreen}/>
         <Tab.Screen name="Événements">
-          {props => <Events setIsLoggedIn={setIsLoggedIn} user={user}/>}
+          {props => <Events user={user}/>}
         </Tab.Screen>
       </Tab.Navigator> :
       <Stack.Navigator screenOptions={screenOptions}>
