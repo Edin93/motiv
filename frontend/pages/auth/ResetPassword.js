@@ -36,7 +36,7 @@ export default function ResetPassword(props) {
             setErrorMessage('Les deux mots de passe ne correspondent pas');
         }
         try {
-            const response = await axios.post(`http://192.168.1.36:3000/api/users/reset-password/${userId}`, {password, confirmPassword});
+            const response = await axios.post(`http://192.168.1.17:3000/api/users/reset-password/${userId}`, {password, confirmPassword});
             if ('user' in response.data) {
                 if (!emailConfirm) {
                     navigation.navigate('Confirmation email', {userId, email});

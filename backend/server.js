@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require('body-parser');
 const activityRouter = require('./routes/ActivityRouter');
 const userRouter = require('./routes/UserRouter');
 const eventRouter = require('./routes/EventRouter');
@@ -12,6 +13,8 @@ const PORT = process.env.PORT || 5050;
 const app = express();
 
 app.use(cors());
+app.use(bodyParser.json({limit: '10mb'}));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 mongoose.connect(
     process.env.DB_URL,
