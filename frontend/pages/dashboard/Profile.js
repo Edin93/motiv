@@ -6,6 +6,7 @@ import EditProfileModal from '../../components/modals/EditProfileModal';
 import EditActivityModal from '../../components/modals/EditActivityModal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { StyleSheet, ScrollView, Image, Text, ActivityIndicator, Pressable, View } from 'react-native';
+import DefaultButton from '../../components/general/DefaultButton';
 
 export default function Profile(props) {
     const {user, navigation} = props;
@@ -143,9 +144,9 @@ export default function Profile(props) {
                                 </Pressable>
                             </ScrollView>
                         </View>
-                        <View style={styles.section}>
+                        <View style={[styles.section, {marginBottom: 180}]}>
                             <Text style={styles.info}>Mes Événements 📅</Text>
-                            <Text>Comming soon...</Text>
+                            {userEvents.length == 0 && <DefaultButton title="Trouver des événements" onPress={() => {navigation.navigate('Événements')}}/>}
                         </View>
                     </View>
                 </View>
