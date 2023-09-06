@@ -1,4 +1,4 @@
-const Activity = require('../models/activityModel');
+const Activity = require('../models/activityModel').Activity;
 const User = require('../models/UserModel');
 const { getActivities, getUsers } = require('../utils/controllerFunctions');
 const { createActivityErrors } = require('../utils/error');

@@ -1,26 +1,27 @@
 module.exports.dateReduction = (date, reduction) => {
+  const newDate = new Date(date);
   switch (reduction) {
     case '10m':
-      date.setMinutes(date.getMinutes() - 10);
-      return date;
+      newDate.setMinutes(newDate.getMinutes() - 10);
+      return newDate;
     case '30m':
-      date.setMinutes(date.getMinutes() - 30);
-      return date;
+      newDate.setMinutes(newDate.getMinutes() - 30);
+      return newDate;
     case '1h':
-      date.setHours(date.getHours() - 1);
-      return date;
+      newDate.setHours(newDate.getHours() - 1);
+      return newDate;
     case '3h':
-      date.setHours(date.getHours() - 3);
-      return date;
+      newDate.setHours(newDate.getHours() - 3);
+      return newDate;
     case '6h':
-      date.setHours(date.getHours() - 6);
-      return date;
+      newDate.setHours(newDate.getHours() - 6);
+      return newDate;
     case '1d':
-      date.setDay(date.getDay() - 1);
-      return date;
+      newDate.setDay(newDate.getDay() - 1);
+      return newDate;
     case '7d':
-      date.setDay(date.getDay() - 7);
-      return date;
+      newDate.setDay(newDate.getDay() - 7);
+      return newDate;
     default:
       return 'erreur';
   }

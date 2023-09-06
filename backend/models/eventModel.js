@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const regionSchema = require('./regionModel');
 const citySchema = require('./cityModel');
+const activitySchema = require('./activityModel').activitySchema;
 
 const eventSchema = mongoose.Schema(
   {
@@ -15,10 +16,11 @@ const eventSchema = mongoose.Schema(
     },
     description: {
       type: String,
+      default: '',
       maxlength: 200,
     },
     activity: {
-      type: String,
+      type: activitySchema,
       required: true,
     },
     isPrivate: {
