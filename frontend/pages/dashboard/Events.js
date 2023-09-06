@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Snackbar } from '@react-native-material/core';
 import Event from '../../components/general/Event';
@@ -15,11 +15,16 @@ export default function Events(props) {
 
     const [customBorderWidth, setBorderWidth] = useState(0);
     const [search, onChangeSearch] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const customOnFocus = () => {
         setBorderWidth(2);
     };
-    const customOnBlur = () => {setBorderWidth(0);};
+    const customOnBlur = () => {setBorderWidth(0)};
+
+    useEffect(() => {
+
+    });
 
     return (
         <SafeAreaView style={{flex: 1}}>
