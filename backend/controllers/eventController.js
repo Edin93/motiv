@@ -65,8 +65,12 @@ module.exports.getAllEvents = (req, res) => {
 // Get all the events filtered
 module.exports.getEventsFilters = async (req, res) => {
   const events = await Event.find();
-  const { title, city, activity } = req.body;
+  const { title, city, activity, userId } = req.body;
   const filteredEvents = events.filter(event => {
+
+    if (event.participants.includes(userId))
+      return false;
+
     if (title && title.length > 0) {
       const eventTitle = event.title.toLowerCase();
       if (!eventTitle.includes(title.toLowerCase())) {
