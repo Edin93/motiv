@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { StyleSheet, View, Pressable, Text, Image } from 'react-native';
+import { StyleSheet, View, Pressable, Text, Image, ActivityIndicator } from 'react-native';
 
 export default function Event(props) {
     const {
@@ -8,41 +9,72 @@ export default function Event(props) {
         activityIconColor,
         activity,
         city,
-        date
+        date,
+        title,
+        adminId
     } = props;
 
+    const [loading, setLoading] = useState(true);
+    const [adminUsername, setAdminUsername] = useState('');
+    const [adminPicture, setAdminPicture] = useState('');
+
+    const formatDate = (date) => {
+        const formattedDate = new Date(date);
+        const jour = String(formattedDate.getDate()).padStart(2, '0');
+        const mois = String(formattedDate.getMonth() + 1).padStart(2, '0');
+        const annee = formattedDate.getFullYear();
+
+        return `${jour}/${mois}/${annee}`;
+    }
+
+    useEffect(() => {
+        const getAdminInfo = async () => {
+            setLoading(true);
+            try {
+                const response = await axios.get(`http://172.20.10.2:3000/api/users/${adminId}`);
+                setAdminUsername(response.data.username);
+                setAdminPicture(response.data.picture);
+                setLoading(false);
+            } catch (e) {
+                console.log('Cannot get Admin info: ' + e);
+                setLoading(false);
+            }
+        };
+        getAdminInfo();
+    }, []);
+
     return (
-        <Pressable onPress={() => {}}>
-            <View style={styles.sectionStyle}>
-                <View style={styles.header}>
-                    <Image
-                        source={{uri: `http://0yiqgak.rmarcais.19000.exp.direct/assets/uploads/default.png`}}
-                        style={styles.image}
-                    />
-                    <Text style={{color: '#ffffff', fontSize: 14, fontWeight: 'bold'}}>Alice propose: Tournois five</Text>
+        <View style={styles.sectionStyle}>
+            <View style={styles.header}>
+            {loading ? <ActivityIndicator color='#ffffff' style={{marginLeft: 15}}/> :
+                <>
+                <Image
+                    source={{uri: `http://0yiqgak.rmarcais.19000.exp.direct/assets/uploads/${adminPicture}`}}
+                    style={styles.image}
+                />
+                <Text style={{color: '#ffffff', fontSize: 14, fontWeight: 'bold'}}>{adminUsername} propose: {title}</Text></>}
+            </View>
+            <View style={styles.eventInfo}>
+                <View style={{alignItems: 'center', maxWidth: '30%'}}>
+                    <Text style={styles.iconStyle}>
+                        <Icon name='map-marker' size={40} color='red'/>
+                    </Text>
+                    <Text style={styles.textStyle}>{city}</Text>
                 </View>
-                <View style={styles.eventInfo}>
-                    <View style={{alignItems: 'center', maxWidth: '30%'}}>
-                        <Text style={styles.iconStyle}>
-                            <Icon name='map-marker' size={40} color='red'/>
-                        </Text>
-                        <Text style={styles.textStyle}>{city}</Text>
-                    </View>
-                    <View style={{alignItems: 'center', maxWidth: '30%'}}>
-                        <Text style={styles.iconStyle}>
-                            <Icon name={activityIcon} size={40} color={activityIconColor}/>
-                        </Text>
-                        <Text style={styles.textStyle}>{activity}</Text>
-                    </View>
-                    <View style={{alignItems: 'center', maxWidth: '30%'}}>
-                        <Text style={styles.iconStyle} numberOfLines={1}>
-                            <Icon name='calendar-month' size={40} color='#4c667d'/>
-                        </Text>
-                        <Text style={styles.textStyle}>{date}</Text>
-                    </View>
+                <View style={{alignItems: 'center', maxWidth: '30%'}}>
+                    <Text style={styles.iconStyle} numberOfLines={1}>
+                        <Icon name='calendar-month' size={40} color='#4c667d'/>
+                    </Text>
+                    <Text style={styles.textStyle}>{formatDate(date)}</Text>
+                </View>
+                <View style={{alignItems: 'center', maxWidth: '30%'}}>
+                    <Text style={styles.iconStyle}>
+                        <Icon name={activityIcon} size={40} color={activityIconColor}/>
+                    </Text>
+                    <Text style={styles.textStyle}>{activity}</Text>
                 </View>
             </View>
-        </Pressable>
+        </View>
     );
 }
 

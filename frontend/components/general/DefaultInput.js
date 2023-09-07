@@ -38,7 +38,7 @@ export default function DefaultInput(props) {
                 placeholder={customPlaceholder}
                 placeholderTextColor='#B6B6B6'
                 underlineColorAndroid='transparent'
-                maxLength={isNumeric ? 10 : 40}
+                maxLength={isNumeric ? 10 : 70}
                 keyboardType={isNumeric ? 'numeric' : 'default'}
             />
             {isPassword && text != '' && <Text style={{marginRight: 20}} onPress={() => setShowPassword(!showPassword)}>

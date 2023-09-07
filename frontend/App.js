@@ -69,7 +69,7 @@ export default function App() {
         const authToken = await AsyncStorage.getItem('authToken');
         if (authToken) {
           const headers = {authorization: `Barer ${authToken}`};
-          axios.get('http://192.168.1.17:3000/api/users/', {headers})
+          axios.get('http://172.20.10.2:3000/api/users/', {headers})
           .then((res) => {
             setUser(res.data.user);
             setIsLoggedIn(true);
@@ -102,7 +102,7 @@ export default function App() {
       <Tab.Navigator screenOptions={tabBarScreenOptions}>
         <Tab.Screen name="ProfilStack" component={ProfileStackScreen}/>
         <Tab.Screen name="Événements">
-          {props => <Events user={user}/>}
+          {props => <Events loggedUser={user}/>}
         </Tab.Screen>
       </Tab.Navigator> :
       <Stack.Navigator screenOptions={screenOptions}>
