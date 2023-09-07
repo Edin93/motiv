@@ -1,78 +1,104 @@
-# Motiv
-
-#### Running the application for development
-* To run the application for development, you need to have the following installed on your machine:
-    * Ubuntu 22.04.2 LTS (preferrably)
-    * Git
-    * NVM (don't really need to because it'll be running on the backend Docker container but it can be useful if we encounter a Docker issue and we need to keep coding).
-    * NodeJS (don't really need to because it'll be running on the backend Docker container but it can be useful if we encounter a Docker issue and we need to keep coding).
-    * Docker
-    * Docker Compose
-    * ...
-    * For more informations about the tools and their versions check the Technical part on [Notion](https://www.notion.so/Technical-b0b079be97bd4ef183235744489eccd1).
-
-#### Installing Android Studio
-* If you want to run the frontend application part on an android emulator, you can either scan the code or install Android Studio. If so, you need to run the following commands:
-    * [Set up Android Studio's tools](https://docs.expo.dev/workflow/android-studio-emulator/).
-
-#### Using Docker without needing to use sudo
-* To be able to use Docker without `sudo` each time, you need to do the following steps:
-* Add the docker group if it doesn't already exist:
-    * ```sudo groupadd docker```
-* Add the connected user "$USER" to the docker group. Change the user name to match your preferred user if you do not want to use your current user:
-    * ```sudo gpasswd -a $USER docker```
-
-#### To run the applications with docker-compose:
-* Need to have:
-    * PS: maybe you'll need to run the Docker and the docker compose commands with `sudo` if you haven't done the previous steps.
-    * To run the application you will not need to do the commands mentioned on the backend part and the frontend ones, Docker compose will take care of all of that. You will only need to run the following command:
-        * ```docker-compose up```
-    * VERY IMPORTANT: each time we update the code of the frontend or the backend IMAGES (i.e the Dockerfile files) we need to rerun the `docker-compose` command with the following option `--build` so that the docker-compose can rebuild the docker images and containers with the newly updated code, so the full command is:
-        * ```docker-compose up --build```
-
-#### Interact with a running container:
-* After executing the ```docker-compose up --build``` command you might want to interact with the frontend and/or the backend running containers (i.e execute commands on the terminal on each of these). To do so, first you need to know the ID of the running container that you want to interact with, by running this command on another terminal:
-    * ```docker ps -a```
-    * The first column contains the ID of containers(s).
-    * To interact with the container, you have to use the following command:
-        * ```docker attach id-of-container-you-want-to-use```
-
-#### Coding in the Docker environments:
-* First, you need to install VSCode if you haven't yet.
-* look for the "Remote Development" extension on VSCode, created by Microsoft and install it.
-* After installing it you'll see a green bottom at the bottom left of your VSCode, click on it.
-* At this step you should have already run the docker-compose command so that your containers are already running.
-* you'll get a prompt menu on the top of your IDE, choose "attach to running container" and choose the "/motiv_backend-motiv-app_1" to work on VSCode for the backend.
-* Then redo the same thing for the "/motiv_frontend-motiv-app_1" to run the frontend part.
-* Once you're connected to the Docker containers on VSCode, you need to go to the project folder and for both the frontend and the backend it's this one: `/usr/src/app` (the one written as the WORKDIR in the Dockerfile).
-
-#### To run the backend part:
-* Need to have:
-    * node18.12 installed
-    * Mongodb installed
-    * The mongodb service running on one's local machine.
-    * All node modules installed locally by running on the terminal inside the backend folder: `npm install`
-* To build the docker image, on the terminal, go to the backend folder and run:
-    * ```docker build -t motiv-backend .```
-    * This command will build the docker image and give it the name **motiv-backend**
-* To run the backend application as Docker container, execute this command:
-    * ```docker run -p 3000:3000 motiv-backend```
-* The application must be up and running on http://localhost:3000
+<p align="center">
+  <img src="https://camo.githubusercontent.com/2dec91e6bf9bc9cb3957f84ed9fe8e9a00dd6139eeeb04d3e2dae81977572059/68747470733a2f2f692e6962622e636f2f6e4d74525851522f486f6c626572746f6e2e706e67" />
+</p>
 
 
-#### To run the frontend part:
-* Need to have:
-    * node18.12 installed
-    * the expo-cli package is installed globally, using the following command: `npm i -g expo-cli`.
-    * All node modules installed locally by running on the terminal inside the frontend folder: `npm install`
-* To build the docker image, on the terminal, go to the frontend folder and run:
-    * ```docker build -t motiv-frontend .```
-    * This command will build the docker image and give it the name **motiv-frontend**
-* To run the frontend application as Docker container, execute this command:
-    * ```docker run -it -p 19000:19000 -p 19001:19001 -p 19006:19006 motiv-frontend```
-* The application must be up and running on the **WEB** (your navigator) on http://localhost:19006
+# Portfolio project: Motiv'
 
+<p align="center">
+  <img src="./readme_img/logomotiv.png" />
+</p>
 
+## Introduction
 
-#### Explanations:
-* Please check the [following page](Explanations.md) to understand the docker commands in details and you can read the comments in the dockerfiles.
+Hi everybody ! We are Rémi Marçais and Maxence Potier. We are software development students at Holberton School Students in Full Stack Specialization and this is our final project of the year ! For our portfolio project, we created an application where you can meet people to do sport togethers and where you can join sport events. To be short, it is like a dating app, but for sport !
+
+Rémi got this idea in April 2022 when he wanted to go the gym. Indeed, he had nobody to go with, which discouraged him most of the time. After a few sessions, he said to himself: *"It would be so cool if I could go there with people that can then become my friend !*. He thought the idea was good and would be even better if he extended the concept to every sports (Basketball, Football, Dance, Tennis...) because he thinks this kind of activity is better together. So he started to develop his idea in his Portfolio project of the Foundations year but a website.
+
+For Maxence, it was almost the same. He started to go to the gym alone and was discouraged too so he did a website for find someone to go to the gym for his Portfolio project of the Foundations year.
+
+During the year of Specialisations, we found that we had the same idea so we decided to combine our two ideas and make our project a reality. To do this, we decided not to work on a website but on an app, given that everything now happens on our smartphones. So we started from scratch and moved on to a MERN project. 
+
+Our objective is to deploy the app, have thousands or even millions users and also be the most popular sports dating app.
+
+## Time
+
+We just had 2 weeks on the reserch and 4 weeks to develop the application.
+
+Technical challenges:
+
+- Learn how to work well in team
+- Create an authentification system with automatic mails
+- Learn how to use React Native
+
+Non-technical challenges:
+
+- Time (Maxence is also a SWE in Bordeaux, France/ School's projects at the same time)
+- Heat wave
+- Budget
+
+## Usage
+
+### Clone the repo
+
+```
+$ git clone https://github.com/Edin93/motiv.git
+```
+
+### Start the back
+```
+$ cd backend
+$ npm install
+$ npm run dev
+```
+
+### Start the front
+
+```
+$ cd frontend
+$ npm install
+$ npm run start
+```
+
+## See the result
+
+### You can login with an account
+<p align="center">
+  <img src="./readme_img/login.png"/>
+</p>
+
+### Access your profile
+<p align="center">
+  <img src="./readme_img/profile.png" />
+</p>
+
+### Change your profile picture
+<p align="center">
+  <img src="./readme_img/profile_change.png" />
+</p>
+
+### Go to the settings and logout
+<p align="center">
+  <img src="./readme_img/settings.png" />
+</p>
+
+### See the available events, their info and join them
+<p align="center">
+  <img src="./readme_img/events.png" />
+</p>
+
+## Contribution
+
+[Houssem Eddine Ben Khalifa](https://www.linkedin.com/in/ben-khalifa-houssem-eddine/)
+
+[Rémi Marçais](https://www.linkedin.com/in/remi-marcais/)
+
+[Maxence Potier](https://www.linkedin.com/in/maxence-potier/)
+
+## License
+
+This project is not opensource. Please don't use this code for any purpose, in threat of lawsuit.
+
+<p align="center">
+  <img src="https://66.media.tumblr.com/tumblr_lztdzreSRJ1qkomroo1_500.gif" />
+</p>
