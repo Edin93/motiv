@@ -17,7 +17,6 @@ module.exports.createEvent = async (req, res) => {
     }
     let date = new Date();
     const eventStart = new Date(start);
-    console.log(date);
     const eventEnd = new Date(end);
     const eventLastCancelation = (dateReduction(eventStart, lastCancelation)).toISOString();
     console.log(eventStart);
@@ -185,4 +184,4 @@ module.exports.leaveEvent = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error })
   }
-}
+};

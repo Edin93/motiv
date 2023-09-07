@@ -57,7 +57,6 @@ module.exports.deleteRecommendation = (req, res) => {
     .catch(error => res.status(200).json({ error }));
 };
 
-
 // Upload profile image
 module.exports.uploadImage = async (req, res) => {
   const { userId } = req.body;

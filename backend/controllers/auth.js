@@ -12,12 +12,15 @@ const generateToken = (id) => {
 
 // Sign Up and send a email confirmation
 module.exports.signUp = async (req, res) => {
+  const body = {...req.body};
+  body.username = body.username.toLowerCase();
   try {
-    const user = await User.create({ ...req.body });
+    const user = await User.create({ ...body });
     const token = generateToken(user._id);
     sendConfirmationMail(subject = 'creation', user);
     res.status(201).json({ user: user._id, token });
   } catch (error) {
+    console.log(error);
     let errors = signUpErrors(error);
     res.status(200).json({errors});
   }

@@ -6,7 +6,6 @@ const activitySchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
     },
     icon: {
       type: String,
