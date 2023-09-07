@@ -17,7 +17,7 @@ export default function SignUpActivities({route, navigation}) {
 
     useEffect(() => {
         setLoading(true);
-        axios.get('http://192.168.1.17:3000/api/activities/')
+        axios.get('http://172.20.10.2:3000/api/activities/')
         .then((res) => {
             setAllActivities(res.data);
             setLoading(false);

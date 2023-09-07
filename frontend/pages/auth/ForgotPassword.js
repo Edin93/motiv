@@ -27,7 +27,7 @@ export default function ForgotPassword({navigation}) {
             setErrorMessage('Un email doit être renseigné pour pouvoir continuer');
         }
         try {
-            const response = await axios.post('http://192.168.1.17:3000/api/users/forgot-password', {email});
+            const response = await axios.post('http://172.20.10.2:3000/api/users/forgot-password', {email});
             if ('errors' in response.data) {
                 setSnackBarVisible(true);
                 setErrorMessage(response.data.errors);

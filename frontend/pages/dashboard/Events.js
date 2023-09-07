@@ -4,18 +4,22 @@ import { Snackbar } from '@react-native-material/core';
 import Event from '../../components/general/Event';
 import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
+import EventModal from '../../components/modals/EventModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Feather';
-import { StyleSheet, ScrollView, SafeAreaView, Image, Text, ActivityIndicator, Pressable, View, TextInput } from 'react-native';
+import { StyleSheet, ScrollView, SafeAreaView, Image, Text, ActivityIndicator, TouchableOpacity, View, TextInput } from 'react-native';
 
 const MAIN_TITLE = "Événements";
 
 export default function Events(props) {
-    const {user} = props;
+    const {loggedUser} = props;
 
     const [customBorderWidth, setBorderWidth] = useState(0);
+    const [allEvents, setAllEvents] = useState([]);
+    const [selectedEvent, setSelectedEvent] = useState({});
     const [search, onChangeSearch] = useState("");
     const [loading, setLoading] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const customOnFocus = () => {
         setBorderWidth(2);
@@ -23,11 +27,33 @@ export default function Events(props) {
     const customOnBlur = () => {setBorderWidth(0)};
 
     useEffect(() => {
+        const getEvents = async () => {
+            setLoading(true);
+            try {
+                const response = await axios.post(`http://172.20.10.2:3000/api/events/search`, {title: search});
+                setAllEvents(response.data.filteredEvents);
+                setLoading(false);
+            } catch (e) {
+                console.log('Cannot get events: ' + e);
+                setLoading(false);
+            }
+        }
+        getEvents();
+    }, [search]);
 
-    });
+    const getEventDetails = async (eventId) => {
+        try {
+            const response = await axios.get(`http://172.20.10.2:3000/api/events/${eventId}`);
+            setSelectedEvent(response.data);
+            setModalVisible(!modalVisible);
+        } catch (e) {
+            console.log('Cannot get Event info: ' + e);
+        }
+    };
 
     return (
         <SafeAreaView style={{flex: 1}}>
+            {!loading && <EventModal modalVisible={modalVisible} setModalVisible={setModalVisible} event={selectedEvent} loggedUser={loggedUser}/>}
             <View style={styles.mainContainer}>
                 <Text style={styles.mainTitle}>{MAIN_TITLE}</Text>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -50,11 +76,19 @@ export default function Events(props) {
                     <Icon name='filter' style={{marginRight: 30}} size={40} color='#f26619'/>
                 </View>
                 <Text style={{fontSize: 16, fontWeight: 'bold', marginLeft: 35, marginTop: 20}}>Résultats:</Text>
+                {loading ? <ActivityIndicator color='#f26619' style={{flex: 1}}/> :
                 <ScrollView automaticallyAdjustKeyboardInsets showsVerticalScrollIndicator={false} style={styles.scrollView}>
-                    <Event icon="basketball" iconColor="#f26619" activity="Basket" city="Laval" date="03/06/24"/>
-                    <Event icon="basketball" iconColor="#f26619" activity="Basket" city="Orléans" date="07/09/23"/>
-                    <Event icon="basketball" iconColor="#f26619" activity="Basket" city="Bordeaux" date="08/09/23"/>
-                </ScrollView>
+                    {allEvents.map((event) => <TouchableOpacity onPress={() => getEventDetails(event._id)} key={event._id}>
+                                                <Event
+                                                     activityIcon={event.activity.icon}
+                                                     activityIconColor={event.activity.iconColor}
+                                                     activity={event.activity.name}
+                                                     city={event.city.name}
+                                                     date={event.start}
+                                                     title={event.title}
+                                                     adminId={event.adminId}/>
+                                              </TouchableOpacity>)}
+                </ScrollView>}
                 <DefaultButton title='Créer un événement' onPress={() => {}}/>
             </View>
         </SafeAreaView>

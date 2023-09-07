@@ -29,7 +29,7 @@ export default function Profile(props) {
     useEffect(() => {
         const getLoggedUser = async () => {
             try {
-                const userObject = await axios.get(`http://192.168.1.17:3000/api/users/${user}`);
+                const userObject = await axios.get(`http://172.20.10.2:3000/api/users/${user}`);
                 setUsername(userObject.data.username);
                 setRecommendation(userObject.data.recommandations.length);
                 setOriganizedEvents(userObject.data.organized_events.length);
@@ -38,7 +38,7 @@ export default function Profile(props) {
                 setPicture(userObject.data.picture);
                 const activities = [];
                 for (const activity of userObject.data.activities) {
-                    const res = await axios.get(`http://192.168.1.17:3000/api/activities/${activity}`);
+                    const res = await axios.get(`http://172.20.10.2:3000/api/activities/${activity}`);
                     activities.push(res.data);
                 }
                 setUserActivities(activities);
@@ -52,7 +52,7 @@ export default function Profile(props) {
     }, [update]);
 
     const handleOpenActivitiesModal = async () => {
-        axios.get('http://192.168.1.17:3000/api/activities/')
+        axios.get('http://172.20.10.2:3000/api/activities/')
         .then((res) => {
             setAllActivities(res.data);
         })
@@ -83,7 +83,7 @@ export default function Profile(props) {
                 selectedActivities={selectedActivities}
                 setSelectedActivities={setSelectedActivities}
                 user={user}/>
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', top: 45, zIndex: 10, paddingHorizontal: 10}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', top: 40, zIndex: 10, paddingHorizontal: 10}}>
                 <View style={styles.creditsSection}>
                     <Icon name='attach-money' size={25} color='gold' style={{paddingRight: 5}}/>
                     {loading ? <ActivityIndicator color='black'/> : <Text style={styles.credits}>{credits}</Text> }
@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         paddingVertical: 10,
         paddingHorizontal: 15,
+        marginTop: 5,
         borderRadius: 20,
         shadowColor: 'black',
         shadowOpacity: 0.2,
