@@ -68,7 +68,7 @@ module.exports.getEventsFilters = async (req, res) => {
   const { title, city, activity, userId } = req.body;
   const filteredEvents = events.filter(event => {
 
-    if (event.participants.includes(userId))
+    if (event.participants.includes(userId) || event.adminId === userId)
       return false;
 
     if (title && title.length > 0) {
