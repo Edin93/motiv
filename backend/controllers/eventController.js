@@ -169,14 +169,14 @@ module.exports.leaveEvent = async (req, res) => {
       { $pull: { participations: event._id} },
       { new: true}
     )
-      .then((newUser) => res.status(200).json({message: "Événement quitté, vous avez perdu 20 crédits", newUser, newEvent}));
+      .then((newUser) => res.status(200).json({successMessage: "Événement quitté, vous avez perdu 20 crédits", newUser, newEvent}));
     else {
       await User.findByIdAndUpdate(
         req.body.userId,
         { $inc: { credits: +20 }, $pull: { participations: event._id } },
         { new: true }
       )
-        .then((newUser) => res.status(200).json({message: "Événement quitté, vos 20 crédits ont été réattribués", newUser, newEvent}));
+        .then((newUser) => res.status(200).json({successMessage: "Événement quitté, vos 20 crédits ont été réattribués", newUser, newEvent}));
     }
   } catch (error) {
     res.status(400).json({ error })
