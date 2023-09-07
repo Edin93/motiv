@@ -136,7 +136,7 @@ module.exports.joinEvent = async (req, res) => {
       { $addToSet: { participants: req.body.userId } },
       { new: true},
     )
-      .then((newEvent) => res.status(200).json({message: "Événement rejoint", newUser, newEvent}));
+      .then((newEvent) => res.status(200).json({successMessage: "Événement rejoint", newUser, newEvent}));
   } else {
     res.status(200).json({message: 'L\'évenement est complet'});
   }
