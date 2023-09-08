@@ -17,7 +17,7 @@ export default function Events(props) {
     let stateData = State.getStatesOfCountry('FR').filter((item) => !/\d/.test(item.isoCode) &&
                                                                     !blackListedStates.includes(item.isoCode));
 
-    const [state, setState] = useState(stateData[0]);
+    const [state, setState] = useState(null);
     const [city, setCity] = useState(null);
     const [cityData, setCityData] = useState();
     const [isFocus, setIsFocus] = useState(false);
