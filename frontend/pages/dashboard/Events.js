@@ -1,26 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Snackbar } from '@react-native-material/core';
+import { State, City } from 'country-state-city';
 import Event from '../../components/general/Event';
-import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import EventModal from '../../components/modals/EventModal';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Dropdown } from 'react-native-element-dropdown';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { StyleSheet, ScrollView, SafeAreaView, Image, Text, ActivityIndicator, TouchableOpacity, View, TextInput } from 'react-native';
+import { StyleSheet, ScrollView, SafeAreaView, Text, ActivityIndicator, TouchableOpacity, View, TextInput } from 'react-native';
 
 const MAIN_TITLE = "Événements";
+const blackListedStates = ['CP', 'PF', 'TF', 'PM', 'BL', 'MF', 'WF'];
 
 export default function Events(props) {
     const {loggedUser} = props;
 
+    let stateData = State.getStatesOfCountry('FR').filter((item) => !/\d/.test(item.isoCode) &&
+                                                                    !blackListedStates.includes(item.isoCode));
+
+    const [state, setState] = useState(stateData[0]);
+    const [city, setCity] = useState(null);
+    const [cityData, setCityData] = useState();
+    const [isFocus, setIsFocus] = useState(false);
     const [customBorderWidth, setBorderWidth] = useState(0);
     const [allEvents, setAllEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState({});
     const [search, onChangeSearch] = useState("");
     const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
+    const [showFilters, setShowFilters] = useState(false);
     const [update, setUpdate] = useState(false);
+    const [credits, setCredits] = useState(0);
 
     const customOnFocus = () => {
         setBorderWidth(2);
@@ -31,8 +40,10 @@ export default function Events(props) {
         const getEvents = async () => {
             setLoading(true);
             try {
-                const response = await axios.post(`http://128.53.5.198:3000/api/events/search`, {title: search, userId: loggedUser});
+                const response = await axios.post(`http://128.53.5.198:3000/api/events/search`, {title: search, userId: loggedUser, city: city});
                 setAllEvents(response.data.filteredEvents || []);
+                const user = await axios.get(`http://128.53.5.198:3000/api/users/${loggedUser}`);
+                setCredits(user.data.credits);
                 setLoading(false);
             } catch (e) {
                 console.log('Cannot get events: ' + e);
@@ -40,7 +51,15 @@ export default function Events(props) {
             }
         }
         getEvents();
-    }, [search, update]);
+    }, [search, update, city]);
+
+    useEffect(() => {
+        setCityData(City.getCitiesOfState('FR', state?.isoCode));
+    }, [state]);
+
+    useEffect(() => {
+        cityData && setCity(cityData[0]);
+    }, [cityData]);
 
     const getEventDetails = async (eventId) => {
         try {
@@ -58,7 +77,7 @@ export default function Events(props) {
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 10, paddingHorizontal: 10}}>
                 <View style={styles.creditsSection}>
                     <Icon name='attach-money' size={25} color='gold' style={{paddingRight: 5}}/>
-                    {loading ? <ActivityIndicator color='black'/> : <Text style={styles.credits}>20</Text> }
+                    {loading ? <ActivityIndicator color='black'/> : <Text style={styles.credits}>{credits}</Text> }
                 </View>
             </View>
             <View style={styles.mainContainer}>
@@ -80,8 +99,52 @@ export default function Events(props) {
                         maxLength={40}
                         />
                     </View>
-                    <Icon name='filter-list-alt' style={{marginRight: 30}} size={50} color='#f26619'/>
+                    <Icon name='filter-list-alt' style={{marginRight: 30}} size={50} color='#f26619' onPress={() => {setShowFilters(!showFilters)}}/>
                 </View>
+                {showFilters &&
+                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20, paddingHorizontal: 10}}>
+                    <Dropdown
+                    style={[styles.dropdown, isFocus, {backgroundColor: '#ffffff'}]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    data={stateData}
+                    maxHeight={300}
+                    labelField="name"
+                    valueField="name"
+                    placeholder={!isFocus ? 'Selectionner une région' : '...'}
+                    searchPlaceholder="Chercher une région"
+                    value={state}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+                    onChange={item => {
+                      setState(item);
+                      setIsFocus(false);
+                    }}
+                    />
+                    <Dropdown
+                        automaticallyAdjustKeyboardInsets
+                        style={[styles.dropdown, isFocus, {backgroundColor: '#ffffff'}]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        data={cityData}
+                        search
+                        maxHeight={300}
+                        labelField="name"
+                        valueField="name"
+                        placeholder={!isFocus ? 'Selectionner une ville' : '...'}
+                        searchPlaceholder="Chercher une ville"
+                        value={city}
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+                        onChange={item => {
+                          setCity(item);
+                          setIsFocus(false);
+                        }}
+                    />
+                    <Icon name='refresh' style={{marginRight: 20}} size={40} color='#f26619' onPress={() => {setCity(null); setState(null)}}/>
+                    </View>}
                 <Text style={{fontSize: 16, fontWeight: 'bold', marginLeft: 35, marginTop: 20}}>Résultats:</Text>
                 {loading ? <ActivityIndicator color='#f26619' style={{flex: 1}}/> :
                 <ScrollView automaticallyAdjustKeyboardInsets showsVerticalScrollIndicator={false} style={styles.scrollView}>
@@ -94,7 +157,7 @@ export default function Events(props) {
                                                      date={event.start}
                                                      title={event.title}
                                                      adminId={event.adminId}/>
-                                              </TouchableOpacity>) : <Text style={{textAlign: 'center'}}>Aucun événement</Text>}
+                                              </TouchableOpacity>) : <Text style={{textAlign: 'center', color: '#f26619', fontWeight:'bold', fontSize: 18}}>Aucun événement</Text>}
                 </ScrollView>}
                 <DefaultButton title='Créer un événement' onPress={() => {}}/>
             </View>
@@ -180,5 +243,26 @@ const styles = StyleSheet.create({
     iconStyle: {
         height: 25,
         width: 25,
-    }
+    },
+    dropdown: {
+        flex: 1,
+        marginVertical: 20,
+        marginHorizontal: 10,
+        padding: 10,
+        borderRadius: 20,
+        shadowColor: 'black',
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
+        elevation: 5
+    },
+    placeholderStyle: {
+        fontSize: 16,
+    },
+    selectedTextStyle: {
+        fontSize: 16,
+    },
+    inputSearchStyle: {
+        fontSize: 16,
+        borderRadius: 20,
+    },
 });

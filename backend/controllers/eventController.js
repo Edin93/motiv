@@ -81,9 +81,9 @@ module.exports.getEventsFilters = async (req, res) => {
         return false;
       }
     }
-    if (city && city.length > 0) {
+    if (city) {
       const eventCity = event.city.name.toLowerCase();
-      if (!eventCity.includes(city.toLowerCase())) {
+      if (!eventCity.includes(city.name.toLowerCase())) {
         return false;
       }
     }
