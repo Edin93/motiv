@@ -62,6 +62,7 @@ const screenOptions = {
 export default function App() {
   const [user, setUser] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [updateApp, setUpdateApp] = useState(false);
 
   useEffect(() => {
     const getAuthToken = async () => {
@@ -69,7 +70,7 @@ export default function App() {
         const authToken = await AsyncStorage.getItem('authToken');
         if (authToken) {
           const headers = {authorization: `Barer ${authToken}`};
-          axios.get('http://172.20.10.2:3000/api/users/', {headers})
+          axios.get('http://128.53.5.198:3000/api/users/', {headers})
           .then((res) => {
             setUser(res.data.user);
             setIsLoggedIn(true);
@@ -83,12 +84,12 @@ export default function App() {
       };
     }
     getAuthToken();
-  }, []);
+  }, [updateApp]);
 
   const ProfileStackScreen = () => (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen name="Profil" options={{headerShown: false}}>
-        {props => <Profile {...props} user={user}/>}
+        {props => <Profile {...props} user={user} updateApp={updateApp} setUpdateApp={setUpdateApp}/>}
       </Stack.Screen>
       <Stack.Screen name="Paramètres" options={options}>
         {props => <Settings {...props} setIsLoggedIn={setIsLoggedIn} user={user}/>}
@@ -102,7 +103,7 @@ export default function App() {
       <Tab.Navigator screenOptions={tabBarScreenOptions}>
         <Tab.Screen name="ProfilStack" component={ProfileStackScreen}/>
         <Tab.Screen name="Événements">
-          {props => <Events loggedUser={user}/>}
+          {props => <Events loggedUser={user} updateApp={updateApp} setUpdateApp={setUpdateApp}/>}
         </Tab.Screen>
       </Tab.Navigator> :
       <Stack.Navigator screenOptions={screenOptions}>

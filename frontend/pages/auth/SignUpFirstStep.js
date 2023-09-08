@@ -33,7 +33,7 @@ export default function SignUpFirstStep({navigation}) {
             setErrorMessage('Les deux mots de passe sont différents');
         } else {
             try {
-                const response = await axios.post('http://172.20.10.2:3000/api/users/check-email-password', {email: email, password: password});
+                const response = await axios.post('http://128.53.5.198:3000/api/users/check-email-password', {email: email, password: password});
                 const error = response.data.errors.message;
 
                 if (error) {

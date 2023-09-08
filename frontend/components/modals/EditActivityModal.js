@@ -24,7 +24,7 @@ export default function EditActivityModal(props) {
                 setSnackBarVisible(true);
                 setErrorMessage('Vous devez selectionner au moins une activité');
             } else {
-                await axios.put(`http://172.20.10.2:3000/api/users/${user}`, {activities: selectedActivities});
+                await axios.put(`http://128.53.5.198:3000/api/users/${user}`, {activities: selectedActivities});
                 setSnackBarVisible(false);
                 setUpdate(!update);
                 setModalVisible(!modalVisible);

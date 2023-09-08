@@ -57,7 +57,7 @@ export default function SignUpSecondStep({route, navigation}) {
             setErrorMessage('Vous devez avoir plus de 15 ans pour continuer');
         } else {
             try {
-                const response = await axios.post('http://172.20.10.2:3000/api/users/check-username', {username});
+                const response = await axios.post('http://128.53.5.198:3000/api/users/check-username', {username});
                 const error = response.data.errors.message;
 
                 if (error) {

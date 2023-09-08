@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 import MapView, { Marker } from 'react-native-maps';
 import DefaultInput from '../../components/general/DefaultInput';
@@ -12,23 +10,36 @@ export default function EventModal(props) {
         modalVisible,
         setModalVisible,
         event,
-        loggedUser} = props;
+        loggedUser,
+        update,
+        setUpdate} = props;
 
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [participants, setParticpants] = useState(event.participants ? event.participants.length : 0);
 
     const joinEvent = async () => {
       try {
-        const response = await axios.post(`http://172.20.10.2:3000/api/events/join/${event._id}`, {userId: loggedUser});
+        const response = await axios.post(`http://128.53.5.198:3000/api/events/join/${event._id}`, {userId: loggedUser});
         if ("message" in response.data) {
           setErrorMessage(response.data.message);
         } else if ("successMessage" in response.data) {
           setSuccessMessage(response.data.successMessage);
+          setParticpants(participants + 1);
         }
       } catch (e) {
         console.log("Can't join event");
       }
     };
+
+    const formatDate = (date) => {
+      const formattedDate = new Date(date);
+      const jour = String(formattedDate.getDate()).padStart(2, '0');
+      const mois = String(formattedDate.getMonth() + 1).padStart(2, '0');
+      const annee = formattedDate.getFullYear();
+
+      return `${jour}/${mois}/${annee}`;
+  }
 
     return (
         <Modal
@@ -46,13 +57,16 @@ export default function EventModal(props) {
                     <Marker coordinate={{latitude: event?.city?.latitude, longitude: event?.city?.longitude}}/>
                     </MapView>
                     <View style={styles.info}>
+                      <Text style={{fontWeight: 'bold', textAlign: 'center'}}>Date: {formatDate(event.start)}</Text>
+                    </View>
+                    <View style={styles.info}>
                       <Text style={{fontWeight: 'bold', textAlign: 'center'}}>Description: {event.description ? event.description : 'pas de description'}</Text>
                     </View>
                     <View style={styles.info}>
                       <Text style={{fontWeight: 'bold', textAlign: 'center'}}>Activité: {event.activity?.name}</Text>
                     </View>
                     <View style={styles.info}>
-                      <Text style={{fontWeight: 'bold', textAlign: 'center'}}>Participants: {event.participants?.length}</Text>
+                      <Text style={{fontWeight: 'bold', textAlign: 'center'}}>Participants: {participants}</Text>
                     </View>
                     <Pressable
                         style={styles.button}
@@ -60,10 +74,10 @@ export default function EventModal(props) {
                         <Text style={{color: '#ffffff', fontSize: 16, textAlign: 'center'}}>Participer</Text>
                     </Pressable>
                     {errorMessage && <Text style={{color: 'red', fontSize: 16, fontWeight: 'bold', textAlign: 'center', marginVertical: 20}}>{errorMessage}</Text>}
-                    {errorMessage && <Text style={{color: 'green', fontSize: 16, fontWeight: 'bold', textAlign: 'center', marginVertical: 20}}>{successMessage}</Text>}
+                    {successMessage && <Text style={{color: 'green', fontSize: 16, fontWeight: 'bold', textAlign: 'center', marginVertical: 20}}>{successMessage}</Text>}
                     <Pressable
                         style={{marginVertical: 15}}
-                        onPress={() => {setModalVisible(!modalVisible); setErrorMessage("")}}>
+                        onPress={() => {setModalVisible(!modalVisible); setErrorMessage(""), setSuccessMessage(""); setUpdate(!update)}}>
                         <Text style={{color: 'red', fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>Fermer</Text>
                     </Pressable>
                 </ScrollView> 

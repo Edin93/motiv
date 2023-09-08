@@ -31,7 +31,7 @@ export default function Event(props) {
         const getAdminInfo = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`http://172.20.10.2:3000/api/users/${adminId}`);
+                const response = await axios.get(`http://128.53.5.198:3000/api/users/${adminId}`);
                 setAdminUsername(response.data.username);
                 setAdminPicture(response.data.picture);
                 setLoading(false);
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     },
     sectionStyle: {
         flex: 1,
+        minWidth: 320,
         marginHorizontal: 15,
         marginBottom: 30,
         justifyContent: 'space-evenly',

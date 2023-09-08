@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Stats from '../../components/general/Stats';
+import Event from '../../components/general/Event';
 import Activity from '../../components/general/Activity'
 import EditProfileModal from '../../components/modals/EditProfileModal';
 import EditActivityModal from '../../components/modals/EditActivityModal';
@@ -29,7 +30,7 @@ export default function Profile(props) {
     useEffect(() => {
         const getLoggedUser = async () => {
             try {
-                const userObject = await axios.get(`http://172.20.10.2:3000/api/users/${user}`);
+                const userObject = await axios.get(`http://128.53.5.198:3000/api/users/${user}`);
                 setUsername(userObject.data.username);
                 setRecommendation(userObject.data.recommandations.length);
                 setOriganizedEvents(userObject.data.organized_events.length);
@@ -38,10 +39,20 @@ export default function Profile(props) {
                 setPicture(userObject.data.picture);
                 const activities = [];
                 for (const activity of userObject.data.activities) {
-                    const res = await axios.get(`http://172.20.10.2:3000/api/activities/${activity}`);
+                    const res = await axios.get(`http://128.53.5.198:3000/api/activities/${activity}`);
                     activities.push(res.data);
                 }
                 setUserActivities(activities);
+                const events = [];
+                for (const event of userObject.data.participations) {
+                    const res = await axios.get(`http://128.53.5.198:3000/api/events/${event}`);
+                    events.push(res.data);
+                }
+                for (const event of userObject.data.organized_events) {
+                    const res = await axios.get(`http://128.53.5.198:3000/api/events/${event}`);
+                    events.push(res.data);
+                }
+                setUserEvents(events);
                 setLoading(false);
             } catch (e) {
                 console.log('Profile page: ' + e);
@@ -52,7 +63,7 @@ export default function Profile(props) {
     }, [update]);
 
     const handleOpenActivitiesModal = async () => {
-        axios.get('http://172.20.10.2:3000/api/activities/')
+        axios.get('http://128.53.5.198:3000/api/activities/')
         .then((res) => {
             setAllActivities(res.data);
         })
@@ -102,9 +113,11 @@ export default function Profile(props) {
                             style={styles.imageStyle}
                         />
                     </Pressable>
-                    <View style={styles.usernameSection}>
-                        <Text style={styles.username} numberOfLines={1}>{username}</Text>
-                    </View>
+                    <Pressable onPress={() => {setUpdate(!update)}}>
+                        <View style={styles.usernameSection}>
+                            <Text style={styles.username} numberOfLines={1}>{username}</Text>
+                        </View>
+                    </Pressable>
                 </View>
             </View>
             }
@@ -118,7 +131,7 @@ export default function Profile(props) {
                             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{paddingTop: 30}}>
                                 <Stats number={recommendation} title='Likes'/>
                                 <Stats number={origanizedEvents} title='Événements créés'/>
-                                <Stats number={participations} title='Événements rejoins'/>
+                                <Stats number={participations} title='Événements rejoints'/>
                             </ScrollView>
                         </View>
                         <View style={styles.section}>
@@ -146,7 +159,19 @@ export default function Profile(props) {
                         </View>
                         <View style={[styles.section, {marginBottom: 180}]}>
                             <Text style={styles.info}>Mes Événements 📅</Text>
-                            {userEvents.length == 0 && <DefaultButton title="Trouver des événements" onPress={() => {navigation.navigate('Événements')}}/>}
+                            {userEvents.length == 0 ? <DefaultButton title="Trouver des événements" onPress={() => {navigation.navigate('Événements')}}/> :
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{paddingVertical: 30}}>
+                                {userEvents.map((event) => <Event
+                                                        key={event._id}
+                                                        activityIcon={event.activity.icon}
+                                                        activityIconColor={event.activity.iconColor}
+                                                        activity={event.activity.name}
+                                                        city={event.city.name}
+                                                        date={event.start}
+                                                        title={event.title}
+                                                        adminId={event.adminId}/>)}
+                            </ScrollView>
+                            }
                         </View>
                     </View>
                 </View>

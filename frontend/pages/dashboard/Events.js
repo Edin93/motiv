@@ -6,7 +6,7 @@ import DefaultInput from '../../components/general/DefaultInput';
 import DefaultButton from '../../components/general/DefaultButton';
 import EventModal from '../../components/modals/EventModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { StyleSheet, ScrollView, SafeAreaView, Image, Text, ActivityIndicator, TouchableOpacity, View, TextInput } from 'react-native';
 
 const MAIN_TITLE = "Événements";
@@ -20,6 +20,7 @@ export default function Events(props) {
     const [search, onChangeSearch] = useState("");
     const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
+    const [update, setUpdate] = useState(false);
 
     const customOnFocus = () => {
         setBorderWidth(2);
@@ -30,8 +31,8 @@ export default function Events(props) {
         const getEvents = async () => {
             setLoading(true);
             try {
-                const response = await axios.post(`http://172.20.10.2:3000/api/events/search`, {title: search});
-                setAllEvents(response.data.filteredEvents);
+                const response = await axios.post(`http://128.53.5.198:3000/api/events/search`, {title: search, userId: loggedUser});
+                setAllEvents(response.data.filteredEvents || []);
                 setLoading(false);
             } catch (e) {
                 console.log('Cannot get events: ' + e);
@@ -39,11 +40,11 @@ export default function Events(props) {
             }
         }
         getEvents();
-    }, [search]);
+    }, [search, update]);
 
     const getEventDetails = async (eventId) => {
         try {
-            const response = await axios.get(`http://172.20.10.2:3000/api/events/${eventId}`);
+            const response = await axios.get(`http://128.53.5.198:3000/api/events/${eventId}`);
             setSelectedEvent(response.data);
             setModalVisible(!modalVisible);
         } catch (e) {
@@ -53,7 +54,13 @@ export default function Events(props) {
 
     return (
         <SafeAreaView style={{flex: 1}}>
-            {!loading && <EventModal modalVisible={modalVisible} setModalVisible={setModalVisible} event={selectedEvent} loggedUser={loggedUser}/>}
+            {!loading && <EventModal modalVisible={modalVisible} setModalVisible={setModalVisible} event={selectedEvent} loggedUser={loggedUser} update={update} setUpdate={setUpdate}/>}
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 10, paddingHorizontal: 10}}>
+                <View style={styles.creditsSection}>
+                    <Icon name='attach-money' size={25} color='gold' style={{paddingRight: 5}}/>
+                    {loading ? <ActivityIndicator color='black'/> : <Text style={styles.credits}>20</Text> }
+                </View>
+            </View>
             <View style={styles.mainContainer}>
                 <Text style={styles.mainTitle}>{MAIN_TITLE}</Text>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -73,12 +80,12 @@ export default function Events(props) {
                         maxLength={40}
                         />
                     </View>
-                    <Icon name='filter' style={{marginRight: 30}} size={40} color='#f26619'/>
+                    <Icon name='filter-list-alt' style={{marginRight: 30}} size={50} color='#f26619'/>
                 </View>
                 <Text style={{fontSize: 16, fontWeight: 'bold', marginLeft: 35, marginTop: 20}}>Résultats:</Text>
                 {loading ? <ActivityIndicator color='#f26619' style={{flex: 1}}/> :
                 <ScrollView automaticallyAdjustKeyboardInsets showsVerticalScrollIndicator={false} style={styles.scrollView}>
-                    {allEvents.map((event) => <TouchableOpacity onPress={() => getEventDetails(event._id)} key={event._id}>
+                    {allEvents.length != 0 ? allEvents.map((event) => <TouchableOpacity onPress={() => getEventDetails(event._id)} key={event._id}>
                                                 <Event
                                                      activityIcon={event.activity.icon}
                                                      activityIconColor={event.activity.iconColor}
@@ -87,7 +94,7 @@ export default function Events(props) {
                                                      date={event.start}
                                                      title={event.title}
                                                      adminId={event.adminId}/>
-                                              </TouchableOpacity>)}
+                                              </TouchableOpacity>) : <Text style={{textAlign: 'center'}}>Aucun événement</Text>}
                 </ScrollView>}
                 <DefaultButton title='Créer un événement' onPress={() => {}}/>
             </View>
@@ -101,7 +108,7 @@ const styles = StyleSheet.create({
         marginBottom: 70
     },
     mainTitle: {
-        margin: 20,
+        marginBottom: 10,
         color: '#F26619',
         textAlign: 'center',
         fontSize: 24,
@@ -143,6 +150,22 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 10,
         elevation: 5
+    },
+    creditsSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 20,
+        shadowColor: 'black',
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
+        elevation: 5
+    },
+    credits: {
+        fontSize: 16,
+        fontWeight: 'bold'
     },
     input: {
         height: 45,
