@@ -162,7 +162,7 @@ module.exports.checkEmailPassword = async (req, res) => {
 // Check if username already exists
 module.exports.checkUsername = async (req, res) => {
   const { username } = req.body;
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username: username.toLowerCase() });
   const errors = { message: ''};
 
   if (user)

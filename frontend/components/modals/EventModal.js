@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MapView, { Marker } from 'react-native-maps';
-import DefaultInput from '../../components/general/DefaultInput';
-import { Snackbar } from '@react-native-material/core';
 import { StyleSheet, Text, Pressable, View, Modal, Image, ActivityIndicator, ScrollView} from 'react-native';
 
 export default function EventModal(props) {

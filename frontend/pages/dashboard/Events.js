@@ -4,6 +4,7 @@ import { State, City } from 'country-state-city';
 import Event from '../../components/general/Event';
 import DefaultButton from '../../components/general/DefaultButton';
 import EventModal from '../../components/modals/EventModal';
+import CreateEventModal from '../../components/modals/CreateEventModal';
 import { Dropdown } from 'react-native-element-dropdown';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { StyleSheet, ScrollView, SafeAreaView, Text, ActivityIndicator, TouchableOpacity, View, TextInput } from 'react-native';
@@ -27,6 +28,7 @@ export default function Events(props) {
     const [search, onChangeSearch] = useState("");
     const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalCreateVisible, setModalCreateVisible] = useState(false);
     const [showFilters, setShowFilters] = useState(false);
     const [update, setUpdate] = useState(false);
     const [credits, setCredits] = useState(0);
@@ -74,6 +76,7 @@ export default function Events(props) {
     return (
         <SafeAreaView style={{flex: 1}}>
             {!loading && <EventModal modalVisible={modalVisible} setModalVisible={setModalVisible} event={selectedEvent} loggedUser={loggedUser} update={update} setUpdate={setUpdate}/>}
+            {!loading && <CreateEventModal modalCreateVisible={modalCreateVisible} setModalCreateVisible={setModalCreateVisible} user={loggedUser}/>}
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', zIndex: 10, paddingHorizontal: 10}}>
                 <View style={styles.creditsSection}>
                     <Icon name='attach-money' size={25} color='gold' style={{paddingRight: 5}}/>
@@ -159,7 +162,7 @@ export default function Events(props) {
                                                      adminId={event.adminId}/>
                                               </TouchableOpacity>) : <Text style={{textAlign: 'center', color: '#f26619', fontWeight:'bold', fontSize: 18}}>Aucun événement</Text>}
                 </ScrollView>}
-                <DefaultButton title='Créer un événement' onPress={() => {}}/>
+                <DefaultButton title='Créer un événement' onPress={() => {setModalCreateVisible(!modalCreateVisible)}}/>
             </View>
         </SafeAreaView>
     );
