@@ -37,7 +37,7 @@ Non-technical challenges:
 - Heat wave
 - Budget
 
-## Usage
+## Simple application launch / usage
 
 ### Clone the repo
 
@@ -59,6 +59,9 @@ $ cd frontend
 $ npm install
 $ npm run start
 ```
+
+### Detailed technical informations
+* For a detailed technical documentation / informations you should check this [Markdown pages summary](./readme_pages_summary.md).
 
 ## See the result
 
