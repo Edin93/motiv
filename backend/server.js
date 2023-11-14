@@ -12,7 +12,13 @@ const PORT = process.env.PORT || 5050;
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+    origin: process.env.URL_CLIENT,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json({limit: '10mb'}));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
@@ -34,7 +40,7 @@ app.use("/api/activities", activityRouter);
 app.use("/api/events", eventRouter);
 app.use("/api/users", userRouter);
 
-deleteCompletedEvents();
+/* deleteCompletedEvents(); */
 
 app.listen(
     PORT,

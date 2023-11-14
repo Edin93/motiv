@@ -29,7 +29,7 @@ export default function EditProfileModal(props) {
                 });
                 formData.append('Content-Type', 'image/jpeg');
                 formData.append("userId", user);
-                await axios.post('http://128.53.5.198:3000/api/users/upload', formData,
+                await axios.post('http://192.168.1.17:3000/api/users/upload', formData,
                 {headers: {
                     'Content-Type': 'multipart/form-data'
                 }});
@@ -87,7 +87,7 @@ export default function EditProfileModal(props) {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <Text style={{fontSize: 20, fontWeight: 'bold'}}>Modifie ta photo de profil</Text>
-                <Image source={{ uri: image ? image : `http://0yiqgak.rmarcais.19000.exp.direct/assets/uploads/${picture}` }} style={styles.image} />
+                <Image source={{ uri: image ? image : `http://0yiqgak.anonymous.19000.exp.direct/assets/uploads/${picture}` }} style={styles.image} />
                 <Pressable
                     style={{elevation: 5, paddingTop: 15}}
                     onPress={pickImage}>

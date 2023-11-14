@@ -18,8 +18,7 @@ module.exports.createEvent = async (req, res) => {
     let date = new Date();
     const eventStart = new Date(start);
     const eventEnd = new Date(end);
-    const eventLastCancelation = (dateReduction(eventStart, lastCancelation)).toISOString();
-    console.log(eventStart);
+    const eventLastCancelation = (dateReduction(eventStart, lastCancelation));
     if (!start || eventStart < date) {
       errors.start = "Date de début incorrecte";
     }
@@ -125,6 +124,9 @@ module.exports.joinEvent = async (req, res) => {
     return res.status(200).json({message: 'Évenement déjà rejoint'});
   if (req.body.userId !== undefined && event.adminId === req.body.userId)
     return res.status(200).json({message: 'Impossible de rejoindre, vous êtes l\'organisateur'});
+  if (event.isPrivate) {
+    return res.status(200).json({ successMessage: "Cet évenement est privé. Une demande a été envoyé au créateur de celui-ci."})
+  }
   if (user.credits < 20) {
     return res.status(200).json({message: 'Crédits insuffisants'});
   }

@@ -1,5 +1,4 @@
 const Activity = require('../models/activityModel').Activity;
-const User = require('../models/UserModel');
 const { getActivities, getUsers } = require('../utils/controllerFunctions');
 const { createActivityErrors } = require('../utils/error');
 
@@ -60,6 +59,7 @@ module.exports.getCount = async (req, res) => {
     })
     res.status(200).json(activitiesDict);
   } catch (error) {
+    console.log(error)
     res.status(200).json({ error });
   }
 }

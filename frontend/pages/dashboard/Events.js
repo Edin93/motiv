@@ -42,9 +42,9 @@ export default function Events(props) {
         const getEvents = async () => {
             setLoading(true);
             try {
-                const response = await axios.post(`http://128.53.5.198:3000/api/events/search`, {title: search, userId: loggedUser, city: city});
+                const response = await axios.post(`http://192.168.1.19:3000/api/events/search`, {title: search, userId: loggedUser, city: city});
                 setAllEvents(response.data.filteredEvents || []);
-                const user = await axios.get(`http://128.53.5.198:3000/api/users/${loggedUser}`);
+                const user = await axios.get(`http://192.168.1.19:3000/api/users/${loggedUser}`);
                 setCredits(user.data.credits);
                 setLoading(false);
             } catch (e) {
@@ -65,7 +65,7 @@ export default function Events(props) {
 
     const getEventDetails = async (eventId) => {
         try {
-            const response = await axios.get(`http://128.53.5.198:3000/api/events/${eventId}`);
+            const response = await axios.get(`http://192.168.1.19:3000/api/events/${eventId}`);
             setSelectedEvent(response.data);
             setModalVisible(!modalVisible);
         } catch (e) {

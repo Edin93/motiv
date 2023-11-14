@@ -37,7 +37,7 @@ module.exports.recommend = (req, res) => {
     return res.status(400).send('Id inconnu');
   }
   User.findByIdAndUpdate(req.params.id, { $addToSet: { refferal: req.body.idToRecommand } }, {new: true})
-    .then(user => res.status(200).json(user))
+    .then(user => res.status(200).json({ message: 'Recommandation ajoutée' }))
     .catch(error => res.status(200).json({ error }));
 
   User.findByIdAndUpdate(req.body.idToRecommand, { $addToSet: { recommandations: req.params.id } })
