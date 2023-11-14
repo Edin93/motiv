@@ -1,9 +1,9 @@
-const Activity = require('../models/activityModel');
+const Activity = require('../models/activityModel').Activity;
 const User = require('../models/UserModel');
 const Event = require('../models/eventModel');
 
 module.exports.getActivities = async () => {
-  const activities = await Activity.find()
+  const activities = Activity.find()
     .then((activities) => {return activities})
     .catch((error) => {return error});
   return activities;

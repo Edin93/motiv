@@ -70,7 +70,7 @@ export default function App() {
         const authToken = await AsyncStorage.getItem('authToken');
         if (authToken) {
           const headers = {authorization: `Barer ${authToken}`};
-          axios.get('http://128.53.5.198:3000/api/users/', {headers})
+          axios.get('http://192.168.1.17:3000/api/users/', {headers})
           .then((res) => {
             setUser(res.data.user);
             setIsLoggedIn(true);

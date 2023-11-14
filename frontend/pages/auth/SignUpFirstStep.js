@@ -6,7 +6,7 @@ import DefaultButton from '../../components/general/DefaultButton';
 import { StyleSheet, SafeAreaView, ScrollView, Image, Text, ActivityIndicator } from 'react-native';
 
 const MAINTITLE = "Bienvenue sur Motiv !";
-const SUBTITLE = "Crée ton comtpe";
+const SUBTITLE = "Crée ton compte";
 
 export default function SignUpFirstStep({navigation}) {
     const [email, onChangeEmail] = useState('');
@@ -31,9 +31,13 @@ export default function SignUpFirstStep({navigation}) {
         } else if (password !== confirmPassword) {
             setSnackBarVisible(true);
             setErrorMessage('Les deux mots de passe sont différents');
+        } else if (password.length < 12 || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password) || !/[^a-zA-Z0-9]/.test(password)) {
+            setSnackBarVisible(true);
+            setErrorMessage("Le mot de passe doit contenir entre 12 et 20 caractères " +
+                        "comprenant au minimum une lettre minuscule, une lettre majuscule, un chiffre et un symbole");
         } else {
             try {
-                const response = await axios.post('http://128.53.5.198:3000/api/users/check-email-password', {email: email, password: password});
+                const response = await axios.post('http://10.5.7.9:3000/api/users/check-email', {email: email});
                 const error = response.data.errors.message;
 
                 if (error) {
@@ -43,12 +47,12 @@ export default function SignUpFirstStep({navigation}) {
                     setSnackBarVisible(false);
                     const newUser = {
                         email,
-                        password
+                        password,
                     }
                     navigation.navigate('Seconde étape', { newUser });
                 }
             } catch (e) {
-                console.log('Sin up first step page' + e);
+                console.log('Sign up first step page' + e);
             }
         }
         setLoading(false);

@@ -18,7 +18,7 @@ export default function EventModal(props) {
 
     const joinEvent = async () => {
       try {
-        const response = await axios.post(`http://128.53.5.198:3000/api/events/join/${event._id}`, {userId: loggedUser});
+        const response = await axios.post(`http://192.168.1.17:3000/api/events/join/${event._id}`, {userId: loggedUser});
         if ("message" in response.data) {
           setErrorMessage(response.data.message);
         } else if ("successMessage" in response.data) {

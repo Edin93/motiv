@@ -31,7 +31,7 @@ export default function Event(props) {
         const getAdminInfo = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`http://128.53.5.198:3000/api/users/${adminId}`);
+                const response = await axios.get(`http://192.168.1.19:3000/api/users/${adminId}`);
                 setAdminUsername(response.data.username);
                 setAdminPicture(response.data.picture);
                 setLoading(false);
@@ -49,7 +49,7 @@ export default function Event(props) {
             {loading ? <ActivityIndicator color='#ffffff' style={{marginLeft: 15}}/> :
                 <>
                 <Image
-                    source={{uri: `http://0yiqgak.rmarcais.19000.exp.direct/assets/uploads/${adminPicture}`}}
+                    source={{uri: `http://qz1b49y.anonymous.19000.exp.direct/assets/uploads/${adminPicture}`}}
                     style={styles.image}
                 />
                 <Text style={{color: '#ffffff', fontSize: 14, fontWeight: 'bold'}}>{adminUsername} propose: {title}</Text></>}

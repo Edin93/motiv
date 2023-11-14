@@ -15,6 +15,7 @@ import {
     Text
 } from 'react-native';
 
+const JWT_TOKEN_KEY = "6mSbYLjpaAcsAPxWLbHXjbEtR9CNZTnY";
 const MAIN_TITLE = "Content de te revoir !";
 const SUBTITLE = "Identifie-toi";
 
@@ -35,9 +36,12 @@ export default function SignIn(props) {
         setLoading(true);
         await new Promise(resolve => setTimeout(resolve, 1000));
         try {
-            const response = await axios.post('http://128.53.5.198:3000/api/users/login', {email, password});
+            const response = await axios.post(
+              "http://172.19.0.1:3000/api/users/login",
+              { email, password }
+            );
             if ('user' in response.data) {
-                const user = await axios.get(`http://128.53.5.198:3000/api/users/${response.data.user}`);
+                const user = await axios.get(`http://192.168.1.17:3000/api/users/${response.data.user}`);
                 if (user.data.hasToUpdatePassword) {
                     setSnackBarVisible(false);
                     navigation.navigate('Nouveau mot de passe', {userId: user.data._id, emailConfirm: user.data.emailConfirm, email: user.data.email});
@@ -46,8 +50,10 @@ export default function SignIn(props) {
                     navigation.navigate('Confirmation email', {userId: user.data._id, email});
                 } else {
                     console.log('L\'utilisateur est bien connecté !');
-                    await AsyncStorage.setItem('authToken', response.data.token);
-                    setUser(user.data._id);
+                    const id = user.data._id;
+                    const token =  jwt.sign({ id }, JWT_TOKEN_KEY, {expiresIn: "30d"});
+                    await AsyncStorage.setItem('authToken', token);
+                    setUser(id);
                     setIsLoggedIn(true);
                 }
             } else if ('errors' in response.data) {

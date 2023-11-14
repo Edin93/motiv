@@ -30,7 +30,7 @@ export default function Profile(props) {
     useEffect(() => {
         const getLoggedUser = async () => {
             try {
-                const userObject = await axios.get(`http://128.53.5.198:3000/api/users/${user}`);
+                const userObject = await axios.get(`http://192.168.1.19:3000/api/users/${user}`);
                 setUsername(userObject.data.username);
                 setRecommendation(userObject.data.recommandations.length);
                 setOriganizedEvents(userObject.data.organized_events.length);
@@ -39,17 +39,17 @@ export default function Profile(props) {
                 setPicture(userObject.data.picture);
                 const activities = [];
                 for (const activity of userObject.data.activities) {
-                    const res = await axios.get(`http://128.53.5.198:3000/api/activities/${activity}`);
+                    const res = await axios.get(`http://192.168.1.19:3000/api/activities/${activity}`);
                     activities.push(res.data);
                 }
                 setUserActivities(activities);
                 const events = [];
                 for (const event of userObject.data.participations) {
-                    const res = await axios.get(`http://128.53.5.198:3000/api/events/${event}`);
+                    const res = await axios.get(`http://192.168.1.19:3000/api/events/${event}`);
                     events.push(res.data);
                 }
                 for (const event of userObject.data.organized_events) {
-                    const res = await axios.get(`http://128.53.5.198:3000/api/events/${event}`);
+                    const res = await axios.get(`http://192.168.1.19:3000/api/events/${event}`);
                     events.push(res.data);
                 }
                 setUserEvents(events);
@@ -63,7 +63,7 @@ export default function Profile(props) {
     }, [update]);
 
     const handleOpenActivitiesModal = async () => {
-        axios.get('http://128.53.5.198:3000/api/activities/')
+        axios.get('http://192.168.1.19:3000/api/activities/')
         .then((res) => {
             setAllActivities(res.data);
         })
@@ -109,7 +109,7 @@ export default function Profile(props) {
                 <View style={{flex: 1, alignItems: 'center'}}>
                     <Pressable onPress={handleProfileModal}>
                         <Image
-                            source={{uri: `http://0yiqgak.rmarcais.19000.exp.direct/assets/uploads/${picture}`}}
+                            source={{uri: `http://qz1b49y.anonymous.19000.exp.direct/assets/uploads/${picture}`}}
                             style={styles.imageStyle}
                         />
                     </Pressable>

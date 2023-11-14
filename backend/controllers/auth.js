@@ -1,13 +1,13 @@
 require("dotenv").config();
 const User = require('../models/UserModel');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const { signUpErrors, signInErrors } = require('../utils/error');
 const { sendConfirmationMail } = require('../utils/generateMail');
 const { JWT_TOKEN_KEY } = process.env;
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, JWT_TOKEN_KEY, {expiresIn: "30d"})
+  return jwt.sign({ id }, JWT_TOKEN_KEY, {expiresIn: "30d"});
 }
 
 // Sign Up and send a email confirmation
@@ -31,8 +31,8 @@ module.exports.signIn = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.login(email, password);
-    const token = generateToken(user._id);
     delete user.password;
+    const token = generateToken(user._id);
     res.status(200).json({ user: user._id, token });
   } catch (error) {
     console.log(error);
@@ -131,7 +131,8 @@ module.exports.resetPassword = async (req, res) => {
           res.status(200).json({errors: "Les deux mots de passe ne correspondent pas"});
         }
     } catch (error) {
-      res.status(200).json({ error });
+      console.log(error)
+      res.status(200).json(error);
     }
   } else {
     res.status(200).json({ errors: "Email inconnu" });
@@ -139,23 +140,12 @@ module.exports.resetPassword = async (req, res) => {
 };
 
 // Check if the email already exists and if password is secure
-module.exports.checkEmailPassword = async (req, res) => {
-  const { email, password } = req.body;
+module.exports.checkEmail = async (req, res) => {
+  const { email } = req.body;
   const user = await User.findOne({ email });
   const errors = { message: ''};
   if (user)
     errors.message = 'Email déjà utilisé';
-  else {
-    if (password.length < 12 ||
-      !/[a-z]/.test(password) ||
-      !/[A-Z]/.test(password) ||
-      !/\d/.test(password) ||
-      !/[^a-zA-Z0-9]/.test(password))
-    {
-      errors.message = "Le mot de passe doit contenir entre 12 et 20 caractères " +
-      "comprenant au minimum une lettre minuscule, une lettre majuscule, un chiffre et un symbole";
-    }
-  }
   res.status(200).json({ errors });
 };
 
